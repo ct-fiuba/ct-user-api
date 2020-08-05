@@ -15,11 +15,11 @@ module.exports = function visitManagerGateway() {
   };
 
   const addEstablishment = async establishmentInfo => {
-    return visitManagerAPI.stream.post('establishments', { body: establishmentInfo });
+    return visitManagerAPI.stream.post('establishments', { json: establishmentInfo });
   };
 
   const updateEstablishment = async (establishmentId, establishmentInfo) => {
-    return visitManagerAPI.stream.put(`establishments/${establishmentId}`, establishmentInfo);
+    return visitManagerAPI.stream.put(`establishments/${establishmentId}`, { json: establishmentInfo });
   };
 
   const deleteEstablishment = async establishmentId => {

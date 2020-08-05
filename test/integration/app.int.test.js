@@ -59,27 +59,27 @@ describe('App test', () => {
       QRs: QRs2
     };
 
-    describe.skip('add first establishments', () => {
+    describe('add first establishments', () => {
       beforeEach(() => {
-        const scope = nock('http://localhost:5005')
+        nock('http://localhost:5005')
         .post('/establishments', correctEstablishment1)
         .reply(201);
       });
 
       test('should return 201', async () => {
-        await request(server).post('/establishments').send(correctEstablishment1).expect('Content-Type', /json/).expect(201);
+        await request(server).post('/establishments').send(correctEstablishment1).expect(201);
       });
     });
 
-    describe.skip('add second establishments', () => {
+    describe('add second establishments', () => {
       beforeEach(() => {
-        const scope = nock('http://localhost:5005')
+        nock('http://localhost:5005')
         .post('/establishments', correctEstablishment2)
         .reply(201);
       });
 
       test('should return 201', async () => {
-        await request(server).post('/establishments').send(correctEstablishment2).expect('Content-Type', /json/).expect(201);
+        await request(server).post('/establishments').send(correctEstablishment2).expect(201);
       });
     });
 
