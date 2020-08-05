@@ -1,5 +1,6 @@
 const app = require('../../src/app')();
 const request = require('supertest');
+const nock = require('nock');
 
 let server;
 
@@ -20,7 +21,11 @@ let address2 = 'Cabildo 2020';
 let QRs2 = ['POU034F', 'ZXCV4567'];
 
 beforeAll(async () => {
-  server = await app.listen(5005);
+  server = await app.listen(5006);
+});
+
+afterAll((done) => {
+  server.close(done)
 });
 
 describe('App test', () => {
@@ -54,19 +59,36 @@ describe('App test', () => {
       QRs: QRs2
     };
 
-    describe('add first establishments', () => {
+    describe.skip('add first establishments', () => {
+      beforeEach(() => {
+        const scope = nock('http://localhost:5005')
+        .post('/establishments', correctEstablishment1)
+        .reply(201);
+      });
+
       test('should return 201', async () => {
         await request(server).post('/establishments').send(correctEstablishment1).expect('Content-Type', /json/).expect(201);
       });
     });
 
-    describe('add second establishments', () => {
+    describe.skip('add second establishments', () => {
+      beforeEach(() => {
+        const scope = nock('http://localhost:5005')
+        .post('/establishments', correctEstablishment2)
+        .reply(201);
+      });
+
       test('should return 201', async () => {
         await request(server).post('/establishments').send(correctEstablishment2).expect('Content-Type', /json/).expect(201);
       });
     });
 
     describe('get establishments', () => {
+      beforeEach(() => {
+        nock('http://localhost:5005')
+        .get('/establishments')
+        .reply(200, [correctEstablishment1, correctEstablishment2]);
+      });
       test('should return all establishments', async () => {
         await request(server).get('/establishments').then(res => {
           expect(res.status).toBe(200);
@@ -76,20 +98,32 @@ describe('App test', () => {
     });
 
     describe('get matching establishments', () => {
+      beforeEach(() => {
+        nock('http://localhost:5005')
+        .get('/establishments?type=restaurant')
+        .reply(200, correctEstablishment1);
+      });
+
       describe('by type', () => {
         test('when restaurant, should return only restaurant establishment', async () => {
           await request(server).get('/establishments?type=restaurant').then(res => {
             expect(res.status).toBe(200);
-            expect(res.body).toHaveLength(1);
+            expect(res.body).toStrictEqual(correctEstablishment1);
           });
         });
       });
 
       describe('by name', () => {
+        beforeEach(() => {
+          nock('http://localhost:5005')
+          .get('/establishments?name=Coto')
+          .reply(200, correctEstablishment2);
+        });
+
         test('when full match, should return that establishment', async () => {
           await request(server).get('/establishments?name=Coto').then(res => {
             expect(res.status).toBe(200);
-            expect(res.body).toHaveLength(1);
+            expect(res.body).toStrictEqual(correctEstablishment2);
           });
         });
       });

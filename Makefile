@@ -8,7 +8,7 @@ run: install
 
 .PHONY: test
 test:
-	(npm test && npm run test:integration && docker stop $(TEST_CONTAINER_NAME)) || docker stop $(TEST_CONTAINER_NAME);
+	npm run test:integration
 
 .PHONY: ping
 ping:
