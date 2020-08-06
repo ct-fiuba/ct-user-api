@@ -21,7 +21,7 @@ let address2 = 'Cabildo 2020';
 let QRs2 = ['POU034F', 'ZXCV4567'];
 
 beforeAll(async () => {
-  server = await app.listen(5006);
+  server = await app.listen(process.env.PORT);
 });
 
 afterAll((done) => {
@@ -59,9 +59,9 @@ describe('App test', () => {
       QRs: QRs2
     };
 
-    describe('add first establishments', () => {
+    describe('add first establishment success', () => {
       beforeEach(() => {
-        nock('http://localhost:5005')
+        nock(process.env.VISIT_MANAGER_URL)
         .post('/establishments', correctEstablishment1)
         .reply(201);
       });
@@ -71,9 +71,25 @@ describe('App test', () => {
       });
     });
 
-    describe('add second establishments', () => {
+    describe('add establishment failure', () => {
       beforeEach(() => {
-        nock('http://localhost:5005')
+        nock(process.env.VISIT_MANAGER_URL)
+        .post('/establishments')
+        .reply(400, {reason:"Missing value"});
+      });
+
+      test('should forward the error', async () => {
+        await request(server).post('/establishments').then(res => {
+          //console.log(res)
+          expect(res.status).toBe(400);
+          expect(res.body).toStrictEqual({reason:"Missing value"});
+        });
+      });
+    });
+
+    describe('add second establishment success', () => {
+      beforeEach(() => {
+        nock(process.env.VISIT_MANAGER_URL)
         .post('/establishments', correctEstablishment2)
         .reply(201);
       });
@@ -85,7 +101,7 @@ describe('App test', () => {
 
     describe('get establishments', () => {
       beforeEach(() => {
-        nock('http://localhost:5005')
+        nock(process.env.VISIT_MANAGER_URL)
         .get('/establishments')
         .reply(200, [correctEstablishment1, correctEstablishment2]);
       });
@@ -99,7 +115,7 @@ describe('App test', () => {
 
     describe('get matching establishments', () => {
       beforeEach(() => {
-        nock('http://localhost:5005')
+        nock(process.env.VISIT_MANAGER_URL)
         .get('/establishments?type=restaurant')
         .reply(200, correctEstablishment1);
       });
@@ -115,7 +131,7 @@ describe('App test', () => {
 
       describe('by name', () => {
         beforeEach(() => {
-          nock('http://localhost:5005')
+          nock(process.env.VISIT_MANAGER_URL)
           .get('/establishments?name=Coto')
           .reply(200, correctEstablishment2);
         });

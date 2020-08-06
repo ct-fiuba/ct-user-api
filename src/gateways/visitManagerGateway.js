@@ -3,7 +3,7 @@ const got = require('got');
 module.exports = function visitManagerGateway() {
 
   const visitManagerAPI = got.extend({
-		prefixUrl: 'http://localhost:5005'
+		prefixUrl: process.env.VISIT_MANAGER_URL
 	});
 
   const findEstablishments = async filters => {

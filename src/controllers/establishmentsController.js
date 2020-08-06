@@ -1,7 +1,7 @@
 const pipelineResponse = (stream, res) => {
-  stream.on('error', () => {
-    res.statusCode = 500;
-    res.end('Something went wrong');
+  stream.on('error', (error) => {
+    res.statusCode = error.response.statusCode;
+    res.json(JSON.parse(error.response.body)).end();
   });
 
   stream.pipe(res)
