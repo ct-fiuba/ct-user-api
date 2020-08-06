@@ -80,7 +80,6 @@ describe('App test', () => {
 
       test('should forward the error', async () => {
         await request(server).post('/establishments').then(res => {
-          //console.log(res)
           expect(res.status).toBe(400);
           expect(res.body).toStrictEqual({reason:"Missing value"});
         });
