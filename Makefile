@@ -6,6 +6,10 @@ install:
 run: install
 	npm start;
 
+.PHONY: run-development
+run-development: install
+	npm run start-development;
+
 .PHONY: test
 test:
 	npm run test:integration
