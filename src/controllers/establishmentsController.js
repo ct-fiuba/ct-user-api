@@ -1,6 +1,5 @@
 const pipelineResponse = (stream, res) => {
   stream.on('error', (error) => {
-    console.log(error)
     res.statusCode = error.response.statusCode;
     res.json(JSON.parse(error.response.body)).end();
   });
