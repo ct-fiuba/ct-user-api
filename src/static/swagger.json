@@ -8,7 +8,7 @@
   "tags": [
     {
       "name": "establishments",
-      "description": "Generation of QR codes related to establishments"
+      "description": "Generation of spaces codes related to establishments"
     }
   ],
   "paths": {
@@ -43,16 +43,9 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "establishmentId": {
-                      "type": "integer",
-                      "example": 1
-                    },
-                    "QRs": {
-                      "type": "array",
-                      "items": {
-                        "type": "integer",
-                        "example": 1234
-                      }
+                    "_id": {
+                      "type": "string",
+                      "example": "1"
                     }
                   }
                 }
@@ -257,30 +250,27 @@
             "type": "string",
             "example": "Argentina"
           },
-          "QRs": {
+          "spaces": {
             "type": "array",
             "items": {
               "type": "object",
               "properties": {
-                "QRCode": {
+                "name": {
                   "type": "string",
-                  "example": "1L23NOIUV081LJOGIJ5D1234085"
+                  "example":"Primer piso"
                 },
-                "nameQR": {
-                  "type": "string",
-                  "example": "Open Store"
+                "hasExit": {
+                  "type":"boolean"
                 },
                 "m2": {
-                  "type": "integer",
-                  "example": 200
+                  "type": "integer"
                 },
-                "openSpace": {
-                  "type": "boolean",
-                  "example": "true"
-                }
-              }
+                "openPlace": {
+                  "type":"boolean"
+              }   
             }
           }
+        }
         }
       },
       "EstablishmentNew": {
@@ -294,7 +284,7 @@
           "province",
           "zip",
           "country",
-          "QRs"
+          "spaces"
         ],
         "properties": {
           "type": {
@@ -329,23 +319,24 @@
             "type": "string",
             "example": "Argentina"
           },
-          "QRs": {
+          "spaces": {
             "type": "array",
             "items": {
               "type": "object",
               "properties": {
-                "nameQR": {
+                "name": {
                   "type": "string",
-                  "example": "Open Store"
+                  "example":"Primer piso"
+                },
+                "hasExit": {
+                  "type":"boolean"
                 },
                 "m2": {
-                  "type": "integer",
-                  "example": 200
+                  "type": "integer"
                 },
-                "openSpace": {
-                  "type": "boolean",
-                  "example": "true"
-                }
+                "openPlace": {
+                  "type":"boolean"
+                }   
               }
             }
           }

@@ -14,6 +14,10 @@ module.exports = function visitManagerGateway() {
     return visitManagerAPI.stream.get(`establishments/${establishmentId}`);
   };
 
+  const getEstablishmentPDF = async establishmentId => {
+    return visitManagerAPI.stream.get(`establishments/PDF/${establishmentId}`);
+  };
+
   const addEstablishment = async establishmentInfo => {
     return visitManagerAPI.stream.post('establishments', { json: establishmentInfo });
   };
@@ -29,6 +33,7 @@ module.exports = function visitManagerGateway() {
   return {
     findEstablishments,
     findEstablishment,
+    getEstablishmentPDF,
     addEstablishment,
     updateEstablishment,
     deleteEstablishment

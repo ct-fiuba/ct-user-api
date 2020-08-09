@@ -10,6 +10,7 @@ module.exports = function establishmentsRouter() {
       .get('/', establishmentsController.get)
       .post('/', establishmentsController.add)
       .get('/:establishmentId', establishmentsController.getSingleEstablishment)
+      .get('/PDF/:establishmentId', establishmentsController.getEstablishmentPDF)
       .put('/:establishmentId', establishmentsController.update)
       .delete('/:establishmentId', establishmentsController.remove)
   );

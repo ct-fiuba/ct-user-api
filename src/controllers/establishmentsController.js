@@ -1,5 +1,6 @@
 const pipelineResponse = (stream, res) => {
   stream.on('error', (error) => {
+    console.log(error)
     res.statusCode = error.response.statusCode;
     res.json(JSON.parse(error.response.body)).end();
   });
@@ -16,6 +17,11 @@ module.exports = function establishmentsController(visitManagerGateway) {
 
   const getSingleEstablishment = async (req, res, next) => {
     let visitManagerResponse = await visitManagerGateway.findEstablishment(req.params.establishmentId)
+    pipelineResponse(visitManagerResponse, res)
+  };
+
+  const getEstablishmentPDF = async (req, res, next) => {
+    let visitManagerResponse = await visitManagerGateway.getEstablishmentPDF(req.params.establishmentId)
     pipelineResponse(visitManagerResponse, res)
   };
 
@@ -39,6 +45,7 @@ module.exports = function establishmentsController(visitManagerGateway) {
     add,
     get,
     getSingleEstablishment,
+    getEstablishmentPDF,
     update,
     remove
   };
