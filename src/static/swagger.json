@@ -1,0 +1,384 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "description": "User API for Contact Tracing",
+    "version": "1.0.0",
+    "title": "User API"
+  },
+  "tags": [
+    {
+      "name": "establishments",
+      "description": "Generation of spaces codes related to establishments"
+    }
+  ],
+  "paths": {
+    "/establishments": {
+      "post": {
+        "tags": [
+          "establishments"
+        ],
+        "summary": "Register new establishment",
+        "operationId": "registerEstablishment",
+        "requestBody": {
+          "description": "Created establishment object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/EstablishmentNew"
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Establishment registered successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "_id": {
+                      "type": "string",
+                      "example": "1"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Missing fields / Invalid visibility"
+          },
+          "409": {
+            "description": "Establishment already registered"
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "establishments"
+        ],
+        "summary": "Get all establishments",
+        "description": "",
+        "operationId": "getEstablishments",
+        "responses": {
+          "200": {
+            "description": "Establishments registered in Visit Manager",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "allOf": [
+                      {
+                        "$ref": "#/components/schemas/Establishment"
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/establishments/{establishmentId}": {
+      "get": {
+        "tags": [
+          "establishments"
+        ],
+        "summary": "Get establishment by id",
+        "description": "",
+        "operationId": "getEstablishmentById",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/pathEstablishmentId"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Establishment registered in Visit Manager",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/Establishment"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Establishment not found"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "establishments"
+        ],
+        "summary": "Delete Establishment by id",
+        "description": "",
+        "operationId": "editEstablishment",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/pathEstablishmentId"
+          }
+        ],
+        "requestBody": {
+          "description": "Edit establishment object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/EditEstablishment"
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Establishment edited successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/Establishment"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid fields / Invalid visibility"
+          },
+          "404": {
+            "description": "Establishment not found"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "establishments"
+        ],
+        "summary": "Delete establishment by id",
+        "description": "",
+        "operationId": "deleteEstablishmentById",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/pathEstablishmentId"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Establishment deleted successfully"
+          },
+          "404": {
+            "description": "Establishment not found"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "parameters": {
+      "pathEstablishmentId": {
+        "in": "path",
+        "name": "establishmentId",
+        "required": true,
+        "schema": {
+          "type": "integer",
+          "minimum": 1
+        }
+      }
+    },
+    "schemas": {
+      "Establishment": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "example": 1
+          },
+          "type": {
+            "type": "string",
+            "example": "restaurant"
+          },
+          "name": {
+            "type": "string",
+            "example": "Mc Donalds"
+          },
+          "email": {
+            "type": "string",
+            "example": "mcdonalds@gmail.com"
+          },
+          "address": {
+            "type": "string",
+            "example": "Cabildo 1010"
+          },
+          "city": {
+            "type": "string",
+            "example": "CABA"
+          },
+          "province": {
+            "type": "string",
+            "example": "CABA"
+          },
+          "zip": {
+            "type": "string",
+            "example": "1430ACV"
+          },
+          "country": {
+            "type": "string",
+            "example": "Argentina"
+          },
+          "spaces": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "example":"Primer piso"
+                },
+                "hasExit": {
+                  "type":"boolean"
+                },
+                "m2": {
+                  "type": "integer"
+                },
+                "openPlace": {
+                  "type":"boolean"
+              }   
+            }
+          }
+        }
+        }
+      },
+      "EstablishmentNew": {
+        "type": "object",
+        "required": [
+          "type",
+          "name",
+          "email",
+          "address",
+          "city",
+          "province",
+          "zip",
+          "country",
+          "spaces"
+        ],
+        "properties": {
+          "type": {
+            "type": "string",
+            "example": "restaurant"
+          },
+          "name": {
+            "type": "string",
+            "example": "Mc Donalds"
+          },
+          "email": {
+            "type": "string",
+            "example": "mcdonalds@gmail.com"
+          },
+          "address": {
+            "type": "string",
+            "example": "Cabildo 1010"
+          },
+          "city": {
+            "type": "string",
+            "example": "CABA"
+          },
+          "province": {
+            "type": "string",
+            "example": "CABA"
+          },
+          "zip": {
+            "type": "string",
+            "example": "1430ACV"
+          },
+          "country": {
+            "type": "string",
+            "example": "Argentina"
+          },
+          "spaces": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "example":"Primer piso"
+                },
+                "hasExit": {
+                  "type":"boolean"
+                },
+                "m2": {
+                  "type": "integer"
+                },
+                "openPlace": {
+                  "type":"boolean"
+                }   
+              }
+            }
+          }
+        }
+      },
+      "EditEstablishment": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "example": "restaurant"
+          },
+          "name": {
+            "type": "string",
+            "example": "Mc Donalds"
+          },
+          "email": {
+            "type": "string",
+            "example": "mcdonalds@gmail.com"
+          },
+          "address": {
+            "type": "string",
+            "example": "Cabildo 1010"
+          },
+          "city": {
+            "type": "string",
+            "example": "CABA"
+          },
+          "province": {
+            "type": "string",
+            "example": "CABA"
+          },
+          "zip": {
+            "type": "string",
+            "example": "1430ACV"
+          },
+          "country": {
+            "type": "string",
+            "example": "Argentina"
+          }
+        }
+      }
+    }
+  }
+}
