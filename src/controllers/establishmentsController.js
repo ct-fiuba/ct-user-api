@@ -4,7 +4,7 @@ const pipelineResponse = (stream, res) => {
     res.json(JSON.parse(error.response.body)).end();
   });
 
-  stream.pipe(res)
+  stream.pipe(res);
 }
 
 module.exports = function establishmentsController(visitManagerGateway) {
