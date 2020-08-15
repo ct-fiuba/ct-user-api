@@ -3,8 +3,8 @@ const got = require('got');
 module.exports = function visitManagerGateway() {
 
   const visitManagerAPI = got.extend({
-		prefixUrl: process.env.VISIT_MANAGER_URL
-	});
+    prefixUrl: process.env.VISIT_MANAGER_URL
+  });
 
   const findEstablishments = async filters => {
     return visitManagerAPI.stream.get('establishments', { searchParams: filters })
