@@ -307,7 +307,7 @@
             "type": "string",
             "example": "CABA"
           },
-          "province": {
+          "state": {
             "type": "string",
             "example": "CABA"
           },
@@ -365,7 +365,7 @@
             "type": "string",
             "example": "CABA"
           },
-          "province": {
+          "state": {
             "type": "string",
             "example": "CABA"
           },
