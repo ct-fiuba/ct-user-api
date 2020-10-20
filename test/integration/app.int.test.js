@@ -5,6 +5,7 @@ const nock = require('nock');
 let server;
 let establishment_id1 = 1;
 let token = 'someToken';
+let invalidToken = 'badToken';
 
 let type1 = 'restaurant';
 let name1 = 'Mc Donalds';
@@ -61,8 +62,12 @@ afterAll((done) => {
 describe('App test', () => {
   beforeEach(() => {
     nock(process.env.AUTH_SERVER_URL)
+    .post('/validateaccesstoken', { accessToken: token })
+    .reply(200, { data: "Some data" })
+    .post('/validateaccesstoken', { accessToken: invalidToken })
+    .reply(401, { data: "Unauthorized!" })
     .post('/validateaccesstoken')
-    .reply(200, { data: "Some data" });
+    .reply(400, { reason: "Error!" });
   });
   
   afterEach(nock.cleanAll);
@@ -142,10 +147,23 @@ describe('App test', () => {
         .get('/establishments')
         .reply(200, [correctEstablishment1, correctEstablishment2]);
       });
+      
       test('should return all establishments', async () => {
         await request(server).get('/establishments').set('access-token', token).then(res => {
           expect(res.status).toBe(200);
           expect(res.body).toHaveLength(2);
+        });
+      });
+
+      test('should fail if using invalid token', async () => {
+        await request(server).get('/establishments').set('access-token', invalidToken).then(res => {
+          expect(res.status).toBe(401);
+        });
+      });
+
+      test('should fail if not sending token', async () => {
+        await request(server).get('/establishments').then(res => {
+          expect(res.status).toBe(400);
         });
       });
     });
@@ -196,6 +214,18 @@ describe('App test', () => {
             expect(res.status).toBe(200);
             expect(res.header['content-type']).toBe('application/pdf');
             expect(res.header['content-disposition']).toContain('attachment');
+          });
+        });
+
+        test('should fail if using invalid token', async () => {
+          await request(server).get(`/establishments/PDF/${establishment_id1}`).set('access-token', invalidToken).then(res => {
+            expect(res.status).toBe(401);
+          });
+        });
+
+        test('should fail if not sending token', async () => {
+          await request(server).get(`/establishments/PDF/${establishment_id1}`).then(res => {
+            expect(res.status).toBe(400);
           });
         });
       });
