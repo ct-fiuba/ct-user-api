@@ -4,6 +4,8 @@ const nock = require('nock');
 
 let server;
 let establishment_id1 = 1;
+let token = 'someToken';
+let invalidToken = 'badToken';
 
 let type1 = 'restaurant';
 let name1 = 'Mc Donalds';
@@ -47,15 +49,29 @@ let spaces2 = [
   }
 ];
 
+
 beforeAll(async () => {
   server = await app.listen(process.env.PORT);
 });
 
 afterAll((done) => {
-  server.close(done)
+  server.close(done);
+  afterAll(nock.restore);
 });
 
 describe('App test', () => {
+  beforeEach(() => {
+    nock(process.env.AUTH_SERVER_URL)
+    .post('/validateaccesstoken', { accessToken: token })
+    .reply(200, { data: "Some data" })
+    .post('/validateaccesstoken', { accessToken: invalidToken })
+    .reply(401, { data: "Unauthorized!" })
+    .post('/validateaccesstoken')
+    .reply(400, { reason: "Error!" });
+  });
+  
+  afterEach(nock.cleanAll);
+  
   describe('ping', () => {
     test('should return 200', async () => {
       await request(server).get('/ping').expect(200);
@@ -131,10 +147,23 @@ describe('App test', () => {
         .get('/establishments')
         .reply(200, [correctEstablishment1, correctEstablishment2]);
       });
+      
       test('should return all establishments', async () => {
-        await request(server).get('/establishments').then(res => {
+        await request(server).get('/establishments').set('access-token', token).then(res => {
           expect(res.status).toBe(200);
           expect(res.body).toHaveLength(2);
+        });
+      });
+
+      test('should fail if using invalid token', async () => {
+        await request(server).get('/establishments').set('access-token', invalidToken).then(res => {
+          expect(res.status).toBe(401);
+        });
+      });
+
+      test('should fail if not sending token', async () => {
+        await request(server).get('/establishments').then(res => {
+          expect(res.status).toBe(400);
         });
       });
     });
@@ -148,7 +177,7 @@ describe('App test', () => {
 
       describe('by type', () => {
         test('when restaurant, should return only restaurant establishment', async () => {
-          await request(server).get('/establishments?type=restaurant').then(res => {
+          await request(server).get('/establishments?type=restaurant').set('access-token', token).then(res => {
             expect(res.status).toBe(200);
             expect(res.body).toStrictEqual(correctEstablishment1);
           });
@@ -163,7 +192,7 @@ describe('App test', () => {
         });
 
         test('when full match, should return that establishment', async () => {
-          await request(server).get('/establishments?name=Coto').then(res => {
+          await request(server).get('/establishments?name=Coto').set('access-token', token).then(res => {
             expect(res.status).toBe(200);
             expect(res.body).toStrictEqual(correctEstablishment2);
           });
@@ -181,10 +210,22 @@ describe('App test', () => {
         });
 
         test('should get a PDF document in the response', async () => {
-          await request(server).get(`/establishments/PDF/${establishment_id1}`).then(res => {
+          await request(server).get(`/establishments/PDF/${establishment_id1}`).set('access-token', token).then(res => {
             expect(res.status).toBe(200);
             expect(res.header['content-type']).toBe('application/pdf');
             expect(res.header['content-disposition']).toContain('attachment');
+          });
+        });
+
+        test('should fail if using invalid token', async () => {
+          await request(server).get(`/establishments/PDF/${establishment_id1}`).set('access-token', invalidToken).then(res => {
+            expect(res.status).toBe(401);
+          });
+        });
+
+        test('should fail if not sending token', async () => {
+          await request(server).get(`/establishments/PDF/${establishment_id1}`).then(res => {
+            expect(res.status).toBe(400);
           });
         });
       });

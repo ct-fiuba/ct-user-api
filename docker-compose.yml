@@ -6,7 +6,9 @@ services:
       context: .
       dockerfile: Dockerfile.web
     image: ct-user-api:latest
+    env_file:
+      - .env
     environment:
       - PORT=5000
     ports:
-      - "5000:5000"
+      - "${PORT}:${PORT}"
