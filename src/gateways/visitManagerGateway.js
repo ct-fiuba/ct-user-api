@@ -30,12 +30,22 @@ module.exports = function visitManagerGateway() {
     return visitManagerAPI.stream.delete(`establishments/${establishmentId}`);
   };
 
+  const addVisit = async visitInfo => {
+    return visitManagerAPI.stream.post('visits', { json: visitInfo });
+  };
+
+  const findVisits = async filters => {
+    return visitManagerAPI.stream.get('visits', { searchParams: filters })
+  };
+
   return {
     findEstablishments,
     findEstablishment,
     getEstablishmentPDF,
     addEstablishment,
     updateEstablishment,
-    deleteEstablishment
+    deleteEstablishment,
+    addVisit,
+    findVisits
   };
 };

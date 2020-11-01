@@ -49,6 +49,9 @@ let spaces2 = [
   }
 ];
 
+let validGenuxToken = "validGenuxToken"
+let invalidGenuxToken = "invalidGenuxToken"
+
 
 beforeAll(async () => {
   server = await app.listen(process.env.PORT);
@@ -67,11 +70,15 @@ describe('App test', () => {
     .post('/validateaccesstoken', { accessToken: invalidToken })
     .reply(401, { data: "Unauthorized!" })
     .post('/validateaccesstoken')
-    .reply(400, { reason: "Error!" });
+    .reply(400, { reason: "Error!" })
+    .post('/useGenuxToken', { genuxToken: validGenuxToken })
+    .reply(200)
+    .post('/useGenuxToken', { genuxToken: invalidGenuxToken })
+    .reply(404);
   });
-  
+
   afterEach(nock.cleanAll);
-  
+
   describe('ping', () => {
     test('should return 200', async () => {
       await request(server).get('/ping').expect(200);
@@ -147,7 +154,7 @@ describe('App test', () => {
         .get('/establishments')
         .reply(200, [correctEstablishment1, correctEstablishment2]);
       });
-      
+
       test('should return all establishments', async () => {
         await request(server).get('/establishments').set('access-token', token).then(res => {
           expect(res.status).toBe(200);
@@ -226,6 +233,52 @@ describe('App test', () => {
         test('should fail if not sending token', async () => {
           await request(server).get(`/establishments/PDF/${establishment_id1}`).then(res => {
             expect(res.status).toBe(400);
+          });
+        });
+      });
+
+      describe('add and get visits', () => {
+        const visit = {
+          scanCode: "SCANCODE1234",
+          userGeneratedCode: "QWER1234YUIO",
+          timestamp: Date.now(),
+          genuxToken: validGenuxToken
+        };
+
+        const visitResponse = {
+          scanCode: "SCANCODE1234",
+          isExitScan: false,
+          userGeneratedCode: "QWER1234YUIO",
+          timestamp: Date.now(),
+        };
+
+        const invalidVisit = {
+          scanCode: "SCANCODE1234",
+          userGeneratedCode: "QWER1234YUIO",
+          timestamp: Date.now(),
+          genuxToken: invalidGenuxToken
+        };
+
+        beforeEach(() => {
+          nock(process.env.VISIT_MANAGER_URL)
+          .post('/visits', visit)
+          .reply(201)
+          .get('/visits')
+          .reply(200, [visitResponse]);
+        });
+
+        test('adding a visit should return 201', async () => {
+          await request(server).post('/visits').send(visit).expect(201);
+        });
+
+        test('adding a visit with invalid genux token should return 404', async () => {
+          await request(server).post('/visits').send(invalidVisit).expect(404);
+        });
+
+        test('getting the visits should return only 1 valid visit', async () => {
+          await request(server).get('/visits').then(res => {
+            expect(res.status).toBe(200);
+            expect(res.body).toStrictEqual([visitResponse]);
           });
         });
       });
