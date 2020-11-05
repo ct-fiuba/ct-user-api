@@ -28,8 +28,14 @@ const genuxMiddleware = () => {
   });
 
   return (req, res, next) => {
+    const token = req.headers['genux-token'];
+
+    if (!token) {
+      return res.status(400).json({ reason: 'Missing genux token' });
+    }
+
     authServerClient.post('useGenuxToken', {
-      json: { genuxToken: req.body.genuxToken }
+      json: { genuxToken: token }
     })
       .then(result => next())
       .catch(err => {

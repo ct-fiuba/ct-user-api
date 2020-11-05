@@ -259,11 +259,11 @@ describe('App test', () => {
         });
 
         test('adding a visit should return 201', async () => {
-          await request(server).post('/visits').send(visit).expect(201);
+          await request(server).post('/visits').set('genux-token', validGenuxToken).send(visit).expect(201);
         });
 
         test('adding a visit with invalid genux token should return 404', async () => {
-          await request(server).post('/visits').send(invalidVisit).expect(404);
+          await request(server).post('/visits').set('genux-token', invalidGenuxToken).send(invalidVisit).expect(404);
         });
       });
     });
