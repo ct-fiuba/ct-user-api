@@ -1,5 +1,5 @@
 const express = require('express');
-const genuxMiddleware = require('../middlewares/genuxMiddleware')();
+const { genuxMiddleware } = require('../middlewares/authenticationMiddleware');
 
 const visitManagerGateway = require('../gateways/visitManagerGateway');
 const visitsController = require('../controllers/visitsController')(visitManagerGateway());
@@ -9,6 +9,6 @@ module.exports = function visitsRouter() {
     '/visits',
     express.Router()
       .get('/', visitsController.get)
-      .post('/', genuxMiddleware, visitsController.add)
+      .post('/', genuxMiddleware(), visitsController.add)
   );
 };
