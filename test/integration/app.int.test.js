@@ -237,19 +237,12 @@ describe('App test', () => {
         });
       });
 
-      describe('add and get visits', () => {
+      describe('add visits', () => {
         const visit = {
           scanCode: "SCANCODE1234",
           userGeneratedCode: "QWER1234YUIO",
           timestamp: Date.now(),
           genuxToken: validGenuxToken
-        };
-
-        const visitResponse = {
-          scanCode: "SCANCODE1234",
-          isExitScan: false,
-          userGeneratedCode: "QWER1234YUIO",
-          timestamp: Date.now(),
         };
 
         const invalidVisit = {
@@ -262,9 +255,7 @@ describe('App test', () => {
         beforeEach(() => {
           nock(process.env.VISIT_MANAGER_URL)
           .post('/visits', visit)
-          .reply(201)
-          .get('/visits')
-          .reply(200, [visitResponse]);
+          .reply(201);
         });
 
         test('adding a visit should return 201', async () => {
@@ -273,13 +264,6 @@ describe('App test', () => {
 
         test('adding a visit with invalid genux token should return 404', async () => {
           await request(server).post('/visits').send(invalidVisit).expect(404);
-        });
-
-        test('getting the visits should return only 1 valid visit', async () => {
-          await request(server).get('/visits').then(res => {
-            expect(res.status).toBe(200);
-            expect(res.body).toStrictEqual([visitResponse]);
-          });
         });
       });
     });

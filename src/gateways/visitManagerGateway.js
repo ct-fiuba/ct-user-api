@@ -34,10 +34,6 @@ module.exports = function visitManagerGateway() {
     return visitManagerAPI.stream.post('visits', { json: visitInfo });
   };
 
-  const findVisits = async filters => {
-    return visitManagerAPI.stream.get('visits', { searchParams: filters })
-  };
-
   return {
     findEstablishments,
     findEstablishment,
@@ -45,7 +41,6 @@ module.exports = function visitManagerGateway() {
     addEstablishment,
     updateEstablishment,
     deleteEstablishment,
-    addVisit,
-    findVisits
+    addVisit
   };
 };
