@@ -8,6 +8,6 @@ module.exports = function visitsRouter() {
   return express.Router().use(
     '/visits',
     express.Router()
-      .post('/', genuxMiddleware(), visitsController.add)
+      .post('/', genuxMiddleware, visitsController.add)
   );
 };

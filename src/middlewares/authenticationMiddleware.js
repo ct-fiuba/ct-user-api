@@ -46,6 +46,6 @@ const genuxMiddleware = () => {
 };
 
 module.exports = {
-  authenticationMiddleware,
-  genuxMiddleware
+  authenticationMiddleware: authenticationMiddleware(),
+  genuxMiddleware: genuxMiddleware()
 };
