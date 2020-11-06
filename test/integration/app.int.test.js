@@ -241,15 +241,13 @@ describe('App test', () => {
         const visit = {
           scanCode: "SCANCODE1234",
           userGeneratedCode: "QWER1234YUIO",
-          timestamp: Date.now(),
-          genuxToken: validGenuxToken
+          timestamp: Date.now()
         };
 
         const invalidVisit = {
           scanCode: "SCANCODE1234",
           userGeneratedCode: "QWER1234YUIO",
-          timestamp: Date.now(),
-          genuxToken: invalidGenuxToken
+          timestamp: Date.now()
         };
 
         beforeEach(() => {
