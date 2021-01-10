@@ -1,11 +1,4 @@
-const pipelineResponse = (stream, res) => {
-  stream.on('error', (error) => {
-    res.statusCode = error.response.statusCode;
-    res.json(JSON.parse(error.response.body)).end();
-  });
-
-  stream.pipe(res);
-}
+const pipelineResponse = require('./utils');
 
 module.exports = function infectedController(virusTrackerGateway) {
   const add = async (req, res, next) => {

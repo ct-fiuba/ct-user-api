@@ -1,11 +1,4 @@
-const pipelineResponse = (stream, res) => {
-  stream.on('error', (error) => {
-    res.statusCode = error.response.statusCode;
-    res.json(JSON.parse(error.response.body)).end();
-  });
-
-  stream.pipe(res);
-}
+const pipelineResponse = require('./utils');
 
 module.exports = function establishmentsController(visitManagerGateway) {
   const get = async (req, res, next) => {
