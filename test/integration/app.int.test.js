@@ -267,15 +267,11 @@ describe('App test', () => {
 
       describe('add infected', () => {
         const visit1 = {
-          scanCode: "SCANCODE1234",
           userGeneratedCode: "QWER1234YUIO",
-          timestamp: Date.now()
         };
 
         const visit2 = {
-          scanCode: "SCANCODE5678",
           userGeneratedCode: "QWER5678YUIO",
-          timestamp: Date.now()
         };
 
         beforeEach(() => {

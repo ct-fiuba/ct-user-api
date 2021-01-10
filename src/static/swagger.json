@@ -328,11 +328,12 @@
                     "type": "array",
                     "items": {
                       "type": "object",
-                      "allOf": [
-                        {
-                          "$ref": "#/components/schemas/Visit"
+                      "properties": {
+                        "userGeneratedCode": {
+                          "type": "string",
+                          "example": "1"
                         }
-                      ]
+                      }
                     }
                   }
                 }
