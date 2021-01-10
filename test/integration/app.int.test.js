@@ -264,6 +264,30 @@ describe('App test', () => {
           await request(server).post('/visits').set('genux-token', invalidGenuxToken).send(invalidVisit).expect(404);
         });
       });
+
+      describe('add infected', () => {
+        const visit1 = {
+          scanCode: "SCANCODE1234",
+          userGeneratedCode: "QWER1234YUIO",
+          timestamp: Date.now()
+        };
+
+        const visit2 = {
+          scanCode: "SCANCODE5678",
+          userGeneratedCode: "QWER5678YUIO",
+          timestamp: Date.now()
+        };
+
+        beforeEach(() => {
+          nock(process.env.VIRUS_TRACKER_URL)
+          .post('/infected', { visits: [visit1, visit2]})
+          .reply(201);
+        });
+
+        test('adding an infected should return 201', async () => {
+          await request(server).post('/infected').set('access-token', token).send({ visits: [visit1, visit2]}).expect(201);
+        });
+      });
     });
   });
 });
