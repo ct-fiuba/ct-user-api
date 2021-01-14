@@ -67,6 +67,17 @@
         "summary": "Get all establishments",
         "description": "",
         "operationId": "getEstablishments",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "access-token",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "required": true
+          }
+        ],
         "responses": {
           "200": {
             "description": "Establishments registered in Visit Manager",
@@ -98,6 +109,15 @@
         "description": "",
         "operationId": "getEstablishmentById",
         "parameters": [
+          {
+            "in": "header",
+            "name": "access-token",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "required": true
+          },
           {
             "$ref": "#/components/parameters/pathEstablishmentId"
           }
@@ -131,6 +151,15 @@
         "description": "",
         "operationId": "editEstablishment",
         "parameters": [
+          {
+            "in": "header",
+            "name": "access-token",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "required": true
+          },
           {
             "$ref": "#/components/parameters/pathEstablishmentId"
           }
@@ -184,6 +213,15 @@
         "operationId": "deleteEstablishmentById",
         "parameters": [
           {
+            "in": "header",
+            "name": "access-token",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "required": true
+          },
+          {
             "$ref": "#/components/parameters/pathEstablishmentId"
           }
         ],
@@ -204,6 +242,17 @@
         ],
         "summary": "Register new visit",
         "operationId": "addVisit",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "genux-token",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "required": true
+          }
+        ],
         "requestBody": {
           "description": "Created visit object",
           "required": true,
@@ -213,7 +262,7 @@
                 "type": "object",
                 "allOf": [
                   {
-                    "$ref": "#/components/schemas/VisitNew"
+                    "$ref": "#/components/schemas/Visit"
                   }
                 ]
               }
@@ -245,6 +294,62 @@
           },
           "409": {
             "description": "Establishment already registered"
+          }
+        }
+      }
+    },
+    "/infected": {
+      "post": {
+        "tags": [
+          "infected"
+        ],
+        "summary": "Register new infected",
+        "operationId": "addInfected",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "access-token",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "required": true
+          }
+        ],
+        "requestBody": {
+          "description": "Detect infected visits",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "visits": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "userGeneratedCode": {
+                          "type": "string",
+                          "example": "1"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Infected registered successfully"
+          },
+          "400": {
+            "description": "Missing fields"
+          },
+          "404": {
+            "description": "N visits not found"
           }
         }
       }
@@ -309,20 +414,20 @@
               "properties": {
                 "name": {
                   "type": "string",
-                  "example":"Primer piso"
+                  "example": "Primer piso"
                 },
                 "hasExit": {
-                  "type":"boolean"
+                  "type": "boolean"
                 },
                 "m2": {
                   "type": "integer"
                 },
                 "openPlace": {
-                  "type":"boolean"
+                  "type": "boolean"
+                }
               }
             }
           }
-        }
         }
       },
       "EstablishmentNew": {
@@ -378,16 +483,16 @@
               "properties": {
                 "name": {
                   "type": "string",
-                  "example":"Primer piso"
+                  "example": "Primer piso"
                 },
                 "hasExit": {
-                  "type":"boolean"
+                  "type": "boolean"
                 },
                 "m2": {
                   "type": "integer"
                 },
                 "openPlace": {
-                  "type":"boolean"
+                  "type": "boolean"
                 }
               }
             }
@@ -431,7 +536,7 @@
           }
         }
       },
-      "VisitNew": {
+      "Visit": {
         "type": "object",
         "required": [
           "scanCode",
