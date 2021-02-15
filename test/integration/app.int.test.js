@@ -223,18 +223,6 @@ describe('App test', () => {
             expect(res.header['content-disposition']).toContain('attachment');
           });
         });
-
-        test('should fail if using invalid token', async () => {
-          await request(server).get(`/establishments/PDF/${establishment_id1}`).set('access-token', invalidToken).then(res => {
-            expect(res.status).toBe(401);
-          });
-        });
-
-        test('should fail if not sending token', async () => {
-          await request(server).get(`/establishments/PDF/${establishment_id1}`).then(res => {
-            expect(res.status).toBe(400);
-          });
-        });
       });
 
       describe('add visits', () => {
