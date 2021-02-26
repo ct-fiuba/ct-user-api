@@ -6,6 +6,7 @@ const swaggerDocument = require('./static/swagger.json');
 const establishmentsRouter = require('./routes/establishmentsRouter');
 const visitsRouter = require('./routes/visitsRouter');
 const infectedRouter = require('./routes/infectedRouter');
+const rulesRouter = require('./routes/rulesRouter');
 const monitoringRouter = require('./routes/monitoringRouter');
 
 module.exports = function app() {
@@ -17,6 +18,7 @@ module.exports = function app() {
   app.use(establishmentsRouter());
   app.use(visitsRouter());
   app.use(infectedRouter());
+  app.use(rulesRouter());
   app.use(monitoringRouter());
   app.use('/swagger', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
