@@ -11,8 +11,8 @@ module.exports = function establishmentsRouter() {
     express.Router()
       .get('/', authenticationMiddleware, establishmentsController.get)
       .post('/', establishmentsController.add)
-      .get('/:establishmentId', authenticationMiddleware, establishmentsController.getSingleEstablishment)
-      .get('/PDF/:establishmentId', authenticationMiddleware, establishmentsController.getEstablishmentPDF)
+      .get('/:establishmentId', establishmentsController.getSingleEstablishment)
+      .get('/PDF/:establishmentId', establishmentsController.getEstablishmentPDF)
       .put('/:establishmentId', authenticationMiddleware, establishmentsController.update)
       .delete('/:establishmentId', authenticationMiddleware, establishmentsController.remove)
   );
