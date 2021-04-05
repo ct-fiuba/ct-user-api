@@ -272,6 +272,180 @@ describe('App test', () => {
           await request(server).post('/infected').set('access-token', token).send({ visits: [visit1, visit2]}).expect(201);
         });
       });
+
+      describe('rules', () => {
+        let ruleHighRisk = {
+          "index": 1,
+          "contagionRisk": "Alto",
+          "m2Value": 10,
+          "m2Cmp": "<"
+        }
+
+        let highRiskId = "60391d320720270014d0a082";
+
+        let ruleHighRiskResponse = {
+          "_id": highRiskId,
+          "index": 1,
+          "contagionRisk": "Alto",
+          "m2Value": 10,
+          "m2Cmp": "<"
+        }
+
+        let ruleMidRisk = {
+          "index": 2,
+          "contagionRisk": "Medio",
+          "m2Value": 10,
+          "m2Cmp": ">"
+        }
+
+        let midRiskId = "60391d320720270014d0a081";
+
+        let ruleMidRiskResponse = {
+          "_id": midRiskId,
+          "index": 2,
+          "contagionRisk": "Medio",
+          "m2Value": 10,
+          "m2Cmp": ">"
+        }
+
+        describe('add rule', () => {
+          beforeEach(() => {
+            nock(process.env.VIRUS_TRACKER_URL)
+            .post('/rules', { rules: [ruleHighRisk]})
+            .reply(201, {rules: [ruleHighRiskResponse]})
+            .post('/rules', { rules: [ruleMidRisk]})
+            .reply(201, {rules: [ruleMidRiskResponse]})
+            .post('/rules', { rules: [ruleHighRisk, ruleMidRisk]})
+            .reply(201, {rules: [ruleHighRiskResponse, ruleMidRiskResponse]})
+          });
+
+          test('add single rule should return 201', async () => {
+            await request(server).post('/rules').send({ rules: [ruleHighRisk] }).expect(201);
+          });
+
+          test('add two rules should return 201', async () => {
+            await request(server).post('/rules').send({ rules: [ruleHighRisk, ruleMidRisk] }).expect(201);
+          });
+        });
+
+        describe('get rules', () => {
+          beforeEach(() => {
+            nock(process.env.VIRUS_TRACKER_URL)
+            .get('/rules')
+            .reply(200, [ruleHighRiskResponse, ruleMidRiskResponse])
+            .get(`/rules/${highRiskId}`)
+            .reply(200, ruleHighRiskResponse)
+            .get(`/rules/${midRiskId}`)
+            .reply(200, ruleMidRiskResponse)
+          });
+
+          test('should return all rules', async () => {
+            await request(server).get('/rules').then(res => {
+              expect(res.status).toBe(200);
+              expect(res.body).toHaveLength(2);
+            });
+          });
+
+          test('should return high risk rule', async () => {
+            await request(server).get(`/rules/${highRiskId}`).then(res => {
+              expect(res.status).toBe(200);
+              expect(res.body._id).toBe(highRiskId);
+              expect(res.body.index).toBe(ruleHighRisk.index);
+              expect(res.body.contagionRisk).toBe(ruleHighRisk.contagionRisk);
+              expect(res.body.m2Value).toBe(ruleHighRisk.m2Value);
+              expect(res.body.m2Cmp).toBe(ruleHighRisk.m2Cmp);
+            });
+          });
+
+          test('should return mid risk rule', async () => {
+            await request(server).get(`/rules/${midRiskId}`).then(res => {
+              expect(res.status).toBe(200);
+              expect(res.body._id).toBe(midRiskId);
+              expect(res.body.index).toBe(ruleMidRisk.index);
+              expect(res.body.contagionRisk).toBe(ruleMidRisk.contagionRisk);
+              expect(res.body.m2Value).toBe(ruleMidRisk.m2Value);
+              expect(res.body.m2Cmp).toBe(ruleMidRisk.m2Cmp);
+            });
+          });
+        });
+
+        describe('delete rules', () => {
+          beforeEach(() => {
+            nock(process.env.VIRUS_TRACKER_URL)
+            .delete('/rules', { ruleIds: [highRiskId]})
+            .reply(204)
+            .delete('/rules', { ruleIds: [midRiskId]})
+            .reply(204)
+            .delete('/rules', { ruleIds: [highRiskId, midRiskId]})
+            .reply(204)
+          });
+
+          test('should delete high risk rule', async () => {
+            await request(server).delete('/rules').send({ ruleIds: [highRiskId] }).then(res => {
+              expect(res.status).toBe(204);
+            });
+          });
+
+          test('should delete mid risk rule', async () => {
+            await request(server).delete('/rules').send({ ruleIds: [midRiskId] }).then(res => {
+              expect(res.status).toBe(204);
+            });
+          });
+
+          test('should delete both rules', async () => {
+            await request(server).delete('/rules').send({ ruleIds: [highRiskId, midRiskId] }).then(res => {
+              expect(res.status).toBe(204);
+            });
+          });
+        });
+
+        describe('update rules', () => {
+          let ruleHighRiskUpdated = {
+            "index": 2,
+            "contagionRisk": "Alto",
+            "m2Value": 10,
+            "m2Cmp": "<"
+          }
+
+          let ruleMidRiskUpdated = {
+            "index": 1,
+            "contagionRisk": "Medio",
+            "m2Value": 10,
+            "m2Cmp": ">"
+          }
+
+          let ruleHighRiskUpdatedResponse = {
+            "_id": highRiskId,
+            "index": 2,
+            "contagionRisk": "Alto",
+            "m2Value": 10,
+            "m2Cmp": "<"
+          }
+
+          let ruleMidRiskUpdatedResponse = {
+            "_id": midRiskId,
+            "index": 1,
+            "contagionRisk": "Medio",
+            "m2Value": 10,
+            "m2Cmp": ">"
+          }
+
+          beforeEach(() => {
+            nock(process.env.VIRUS_TRACKER_URL)
+            .put('/rules', { rules: [ruleHighRiskUpdated, ruleMidRiskUpdated]})
+            .reply(200, [ruleHighRiskUpdatedResponse, ruleMidRiskUpdatedResponse])
+          });
+
+          test('should update the indexes', async () => {
+            let aux = ruleHighRisk.index;
+            ruleHighRisk.index = ruleMidRisk.index;
+            ruleMidRisk.index = aux;
+            await request(server).put('/rules').send({ rules: [ruleHighRisk, ruleMidRisk] }).then(res => {
+              expect(res.status).toBe(200);
+            });
+          });
+        });
+      });
     });
   });
 });
