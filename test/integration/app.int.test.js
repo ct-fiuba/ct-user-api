@@ -269,7 +269,7 @@ describe('App test', () => {
         });
 
         test('adding an infected should return 201', async () => {
-          await request(server).post('/infected').set('access-token', token).send({ visits: [visit1, visit2]}).expect(201);
+          await request(server).post('/infected').set('genux-token', validGenuxToken).set('access-token', token).send({ visits: [visit1, visit2]}).expect(201);
         });
       });
 
