@@ -258,18 +258,14 @@ describe('App test', () => {
           userGeneratedCode: "QWER1234YUIO",
         };
 
-        const visit2 = {
-          userGeneratedCode: "QWER5678YUIO",
-        };
-
         beforeEach(() => {
           nock(process.env.VIRUS_TRACKER_URL)
-          .post('/infected', { visits: [visit1, visit2]})
+          .post('/infected', visit1)
           .reply(201);
         });
 
         test('adding an infected should return 201', async () => {
-          await request(server).post('/infected').set('access-token', token).send({ visits: [visit1, visit2]}).expect(201);
+          await request(server).post('/infected').set('genux-token', validGenuxToken).set('access-token', token).send(visit1).expect(201);
         });
       });
 
