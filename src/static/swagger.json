@@ -613,6 +613,10 @@
                 },
                 "openPlace": {
                   "type": "boolean"
+                },
+                "n95Mandatory": {
+                  "type": "boolean",
+                  "example": "false"
                 }
               }
             }
@@ -682,6 +686,10 @@
                 },
                 "openPlace": {
                   "type": "boolean"
+                },
+                "n95Mandatory": {
+                  "type": "boolean",
+                  "example": "false"
                 }
               }
             }
@@ -730,7 +738,10 @@
         "required": [
           "scanCode",
           "userGeneratedCode",
-          "timestamp"
+          "timestamp",
+          "isExitScan",
+          "vaccinated",
+          "covidRecovered"
         ],
         "properties": {
           "scanCode": {
@@ -744,6 +755,30 @@
           "timestamp": {
             "type": "datetime",
             "example": "1970-01-01 00:00:01"
+          },
+          "isExitScan": {
+            "type": "boolean",
+            "example": "true"
+          },
+          "vaccinated": {
+            "type": "integer",
+            "example": "1"
+          },
+          "vaccineReceived": {
+            "type": "string",
+            "example": "Pfizer"
+          },
+          "vaccinatedDate": {
+            "type": "datetime",
+            "example": "1970-01-01 00:00:01"
+          },
+          "covidRecovered": {
+            "type": "boolean",
+            "example": "true"
+          },
+          "covidRecoveredDate": {
+            "type": "boolean",
+            "example": "true"
           }
         }
       },
@@ -765,6 +800,30 @@
           "m2Cmp": {
             "type": "string",
             "example": ">"
+          },
+          "n95Mandatory": {
+            "type": "boolean",
+            "example": "false"
+          },
+          "vaccinated": {
+            "type": "integer",
+            "example": "1"
+          },
+          "vaccineReceived": {
+            "type": "string",
+            "example": "Pfizer"
+          },
+          "vaccinatedDaysAgoMin": {
+            "type": "integer",
+            "example": "60"
+          },
+          "covidRecovered": {
+            "type": "boolean",
+            "example": "true"
+          },
+          "covidRecoveredDaysAgoMax": {
+            "type": "integer",
+            "example": "60"
           }
         }
       },

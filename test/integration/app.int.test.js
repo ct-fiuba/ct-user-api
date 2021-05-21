@@ -20,13 +20,15 @@ let spaces1 = [
     name: "Primer piso",
     hasExit: true,
     m2: "1000",
-    openPlace: false
+    openPlace: false,
+    n95Mandatory: false
   },
   {
     name: "Terraza",
     hasExit: false,
     m2: "400",
-    openPlace: true
+    openPlace: true,
+    n95Mandatory: false
   }
 ];
 
@@ -39,13 +41,15 @@ let spaces2 = [
     name: "Primer piso",
     hasExit: true,
     m2: "1000",
-    openPlace: false
+    openPlace: false,
+    n95Mandatory: false
   },
   {
     name: "Terraza",
     hasExit: false,
     m2: "400",
-    openPlace: true
+    openPlace: true,
+    n95Mandatory: false
   }
 ];
 
@@ -229,13 +233,17 @@ describe('App test', () => {
         const visit = {
           scanCode: "SCANCODE1234",
           userGeneratedCode: "QWER1234YUIO",
-          timestamp: Date.now()
+          timestamp: Date.now(),
+          vaccinated: 0,
+          covidRecovered: false
         };
 
         const invalidVisit = {
           scanCode: "SCANCODE1234",
           userGeneratedCode: "QWER1234YUIO",
-          timestamp: Date.now()
+          timestamp: Date.now(),
+          vaccinated: 0,
+          covidRecovered: false
         };
 
         beforeEach(() => {
