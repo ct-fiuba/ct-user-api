@@ -1,6 +1,6 @@
 const got = require('got');
 
-const authenticationMiddleware = () => {
+const usersAuthenticationMiddleware = () => {
   const authServerClient = got.extend({
     prefixUrl: process.env.AUTH_SERVER_URL
   });
@@ -11,7 +11,51 @@ const authenticationMiddleware = () => {
       return res.status(400).json({ reason: 'Missing access token' });
     }
 
-    authServerClient.post('validateaccesstoken', {
+    authServerClient.post('users/validateaccesstoken', {
+      json: { accessToken: token }
+    })
+      .then(result => next())
+      .catch(err => {
+        console.error(err.response.statusCode, err.response.body);
+        res.status(401).json(err.response.body);
+      });
+  }
+};
+
+const ownersAuthenticationMiddleware = () => {
+  const authServerClient = got.extend({
+    prefixUrl: process.env.AUTH_SERVER_URL
+  });
+
+  return (req, res, next) => {
+    const token = req.headers['access-token'];
+    if (!token) {
+      return res.status(400).json({ reason: 'Missing access token' });
+    }
+
+    authServerClient.post('owners/validateaccesstoken', {
+      json: { accessToken: token }
+    })
+      .then(result => next())
+      .catch(err => {
+        console.error(err.response.statusCode, err.response.body);
+        res.status(401).json(err.response.body);
+      });
+  }
+};
+
+const adminsAuthenticationMiddleware = () => {
+  const authServerClient = got.extend({
+    prefixUrl: process.env.AUTH_SERVER_URL
+  });
+
+  return (req, res, next) => {
+    const token = req.headers['access-token'];
+    if (!token) {
+      return res.status(400).json({ reason: 'Missing access token' });
+    }
+
+    authServerClient.post('admins/validateaccesstoken', {
       json: { accessToken: token }
     })
       .then(result => next())
@@ -46,6 +90,8 @@ const genuxMiddleware = () => {
 };
 
 module.exports = {
-  authenticationMiddleware: authenticationMiddleware(),
+  usersAuthenticationMiddleware: usersAuthenticationMiddleware(),
+  ownersAuthenticationMiddleware: ownersAuthenticationMiddleware(),
+  adminsAuthenticationMiddleware: adminsAuthenticationMiddleware(),
   genuxMiddleware: genuxMiddleware()
 };
