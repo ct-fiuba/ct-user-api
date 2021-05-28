@@ -7,6 +7,11 @@ module.exports = function establishmentsController(visitManagerGateway) {
     pipelineResponse(visitManagerResponse, res)
   };
 
+  const getEstablishmentsByOwner = async (req, res, next) => {
+    let visitManagerResponse = await visitManagerGateway.findEstablishmentsByOwner(req.params.ownerId)
+    pipelineResponse(visitManagerResponse, res)
+  };
+
   const getSingleEstablishment = async (req, res, next) => {
     let visitManagerResponse = await visitManagerGateway.findEstablishment(req.params.establishmentId)
     pipelineResponse(visitManagerResponse, res)
@@ -36,6 +41,7 @@ module.exports = function establishmentsController(visitManagerGateway) {
   return {
     add,
     get,
+    getEstablishmentsByOwner,
     getSingleEstablishment,
     getEstablishmentPDF,
     update,

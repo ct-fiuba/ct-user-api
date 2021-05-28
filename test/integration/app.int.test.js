@@ -9,7 +9,6 @@ let invalidToken = 'badToken';
 
 let type1 = 'restaurant';
 let name1 = 'Mc Donalds';
-let email1 = 'mcdonalds@gmail.com';
 let address1 = 'Cabildo 1010';
 let city = 'CABA';
 let province = 'CABA';
@@ -34,7 +33,6 @@ let spaces1 = [
 
 let type2 = 'supermarket';
 let name2 = 'Coto';
-let email2 = 'coto@gmail.com';
 let address2 = 'Cabildo 2020';
 let spaces2 = [
   {
@@ -93,7 +91,6 @@ describe('App test', () => {
     const correctEstablishment1 = {
       type: type1,
       name: name1,
-      email: email1,
       address: address1,
       city,
       province,
@@ -104,7 +101,6 @@ describe('App test', () => {
     const correctEstablishment2 = {
       type: type2,
       name: name2,
-      email: email2,
       address: address2,
       city,
       province,

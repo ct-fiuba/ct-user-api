@@ -10,6 +10,10 @@ module.exports = function visitManagerGateway() {
     return visitManagerAPI.stream.get('establishments', { searchParams: filters })
   };
 
+  const findEstablishmentsByOwner = async ownerId => {
+    return visitManagerAPI.stream.get(`establishments/owner/${ownerId}`);
+  };
+
   const findEstablishment = async establishmentId => {
     return visitManagerAPI.stream.get(`establishments/${establishmentId}`);
   };
@@ -36,6 +40,7 @@ module.exports = function visitManagerGateway() {
 
   return {
     findEstablishments,
+    findEstablishmentsByOwner,
     findEstablishment,
     getEstablishmentPDF,
     addEstablishment,
