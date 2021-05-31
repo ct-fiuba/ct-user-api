@@ -33,6 +33,12 @@ module.exports = function establishmentsController(visitManagerGateway) {
     pipelineResponse(visitManagerResponse, res)
   };
 
+  const updateSpace = async (req, res, next) => {
+    spaceId = req.params.spaceId;
+    let visitManagerResponse = await visitManagerGateway.updateSpace(spaceId, req.body)
+    pipelineResponse(visitManagerResponse, res)
+  };
+
   const remove = async (req, res, next) => {
     let visitManagerResponse = await visitManagerGateway.deleteEstablishment(req.params.establishmentId)
     pipelineResponse(visitManagerResponse, res)
@@ -45,6 +51,7 @@ module.exports = function establishmentsController(visitManagerGateway) {
     getSingleEstablishment,
     getEstablishmentPDF,
     update,
+    updateSpace,
     remove
   };
 };

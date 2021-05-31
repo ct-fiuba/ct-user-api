@@ -18,6 +18,7 @@ module.exports = function establishmentsRouter() {
       .get('/owner/:ownerId', ownersAuthenticationMiddleware, establishmentsController.getEstablishmentsByOwner)
       .get('/PDF/:establishmentId', establishmentsController.getEstablishmentPDF)
       .put('/:establishmentId', ownersAuthenticationMiddleware, establishmentsController.update)
+      .put('/space/:spaceId', ownersAuthenticationMiddleware, establishmentsController.updateSpace)
       .delete('/:establishmentId', adminsAuthenticationMiddleware, establishmentsController.remove)
   );
 };
