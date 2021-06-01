@@ -22,8 +22,18 @@ module.exports = function establishmentsController(visitManagerGateway) {
     pipelineResponse(visitManagerResponse, res)
   };
 
+  const getSingleSpacePDF = async (req, res, next) => {
+    let visitManagerResponse = await visitManagerGateway.getSingleSpacePDF(req.params.establishmentId, req.params.spaceId)
+    pipelineResponse(visitManagerResponse, res)
+  };
+  
   const add = async (req, res, next) => {
     let visitManagerResponse = await visitManagerGateway.addEstablishment(req.body)
+    pipelineResponse(visitManagerResponse, res)
+  };
+
+  const addSingleSpace = async (req, res, next) => {
+    let visitManagerResponse = await visitManagerGateway.addSingleSpace(req.body)
     pipelineResponse(visitManagerResponse, res)
   };
 
@@ -46,10 +56,12 @@ module.exports = function establishmentsController(visitManagerGateway) {
 
   return {
     add,
+    addSingleSpace,
     get,
     getEstablishmentsByOwner,
     getSingleEstablishment,
     getEstablishmentPDF,
+    getSingleSpacePDF,
     update,
     updateSpace,
     remove

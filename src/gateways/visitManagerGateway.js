@@ -22,8 +22,16 @@ module.exports = function visitManagerGateway() {
     return visitManagerAPI.stream.get(`establishments/PDF/${establishmentId}`);
   };
 
+  const getSingleSpacePDF = async (establishmentId, spaceId) => {
+    return visitManagerAPI.stream.get(`establishments/PDF/${establishmentId}/space/${spaceId}`);
+  };
+
   const addEstablishment = async establishmentInfo => {
     return visitManagerAPI.stream.post('establishments', { json: establishmentInfo });
+  };
+
+  const addSingleSpace = async spaceInfo => {
+    return visitManagerAPI.stream.post('establishments/space', { json: spaceInfo });
   };
 
   const updateEstablishment = async (establishmentId, establishmentInfo) => {
@@ -47,7 +55,9 @@ module.exports = function visitManagerGateway() {
     findEstablishmentsByOwner,
     findEstablishment,
     getEstablishmentPDF,
+    getSingleSpacePDF,
     addEstablishment,
+    addSingleSpace,
     updateEstablishment,
     updateSpace,
     deleteEstablishment,
