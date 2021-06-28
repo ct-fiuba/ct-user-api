@@ -1,6 +1,18 @@
 const got = require('got');
 
-const authenticationMiddleware = () => {
+const usersAuthenticationMiddleware = () => {
+  return validateAccessToken('users');
+};
+
+const ownersAuthenticationMiddleware = () => {
+  return validateAccessToken('owners');
+};
+
+const adminsAuthenticationMiddleware = () => {
+  return validateAccessToken('admins');
+};
+
+const validateAccessToken = (role) => {
   const authServerClient = got.extend({
     prefixUrl: process.env.AUTH_SERVER_URL
   });
@@ -11,7 +23,7 @@ const authenticationMiddleware = () => {
       return res.status(400).json({ reason: 'Missing access token' });
     }
 
-    authServerClient.post('validateaccesstoken', {
+    authServerClient.post(`${role}/validateaccesstoken`, {
       json: { accessToken: token }
     })
       .then(result => next())
@@ -20,7 +32,7 @@ const authenticationMiddleware = () => {
         res.status(401).json(err.response.body);
       });
   }
-};
+}
 
 const genuxMiddleware = () => {
   const authServerClient = got.extend({
@@ -46,6 +58,8 @@ const genuxMiddleware = () => {
 };
 
 module.exports = {
-  authenticationMiddleware: authenticationMiddleware(),
+  usersAuthenticationMiddleware: usersAuthenticationMiddleware(),
+  ownersAuthenticationMiddleware: ownersAuthenticationMiddleware(),
+  adminsAuthenticationMiddleware: adminsAuthenticationMiddleware(),
   genuxMiddleware: genuxMiddleware()
 };

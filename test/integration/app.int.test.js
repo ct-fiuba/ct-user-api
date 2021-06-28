@@ -9,7 +9,6 @@ let invalidToken = 'badToken';
 
 let type1 = 'restaurant';
 let name1 = 'Mc Donalds';
-let email1 = 'mcdonalds@gmail.com';
 let address1 = 'Cabildo 1010';
 let city = 'CABA';
 let province = 'CABA';
@@ -34,7 +33,6 @@ let spaces1 = [
 
 let type2 = 'supermarket';
 let name2 = 'Coto';
-let email2 = 'coto@gmail.com';
 let address2 = 'Cabildo 2020';
 let spaces2 = [
   {
@@ -69,16 +67,16 @@ afterAll((done) => {
 describe('App test', () => {
   beforeEach(() => {
     nock(process.env.AUTH_SERVER_URL)
-    .post('/validateaccesstoken', { accessToken: token })
-    .reply(200, { data: "Some data" })
-    .post('/validateaccesstoken', { accessToken: invalidToken })
-    .reply(401, { data: "Unauthorized!" })
-    .post('/validateaccesstoken')
-    .reply(400, { reason: "Error!" })
-    .post('/useGenuxToken', { genuxToken: validGenuxToken })
-    .reply(200)
-    .post('/useGenuxToken', { genuxToken: invalidGenuxToken })
-    .reply(404);
+      .post('/owners/validateaccesstoken', { accessToken: token })
+      .reply(200, { data: "Some data" })
+      .post('/admins/validateaccesstoken', { accessToken: token })
+      .reply(200, { data: "Some data" })
+      .post('/admins/validateaccesstoken', { accessToken: invalidToken })
+      .reply(401, { data: "Unauthorized!" })
+      .post('/useGenuxToken', { genuxToken: validGenuxToken })
+      .reply(200)
+      .post('/useGenuxToken', { genuxToken: invalidGenuxToken })
+      .reply(404);
   });
 
   afterEach(nock.cleanAll);
@@ -93,7 +91,6 @@ describe('App test', () => {
     const correctEstablishment1 = {
       type: type1,
       name: name1,
-      email: email1,
       address: address1,
       city,
       province,
@@ -104,7 +101,6 @@ describe('App test', () => {
     const correctEstablishment2 = {
       type: type2,
       name: name2,
-      email: email2,
       address: address2,
       city,
       province,
@@ -116,26 +112,26 @@ describe('App test', () => {
     describe('add first establishment success', () => {
       beforeEach(() => {
         nock(process.env.VISIT_MANAGER_URL)
-        .post('/establishments', correctEstablishment1)
-        .reply(201);
+          .post('/establishments', correctEstablishment1)
+          .reply(201);
       });
 
       test('should return 201', async () => {
-        await request(server).post('/establishments').send(correctEstablishment1).expect(201);
+        await request(server).post('/establishments').set('access-token', token).send(correctEstablishment1).expect(201);
       });
     });
 
     describe('add establishment failure', () => {
       beforeEach(() => {
         nock(process.env.VISIT_MANAGER_URL)
-        .post('/establishments')
-        .reply(400, {reason:"Missing value"});
+          .post('/establishments')
+          .reply(400, { reason: "Missing value" });
       });
 
       test('should forward the error', async () => {
-        await request(server).post('/establishments').then(res => {
+        await request(server).post('/establishments').set('access-token', token).then(res => {
           expect(res.status).toBe(400);
-          expect(res.body).toStrictEqual({reason:"Missing value"});
+          expect(res.body).toStrictEqual({ reason: "Missing value" });
         });
       });
     });
@@ -143,20 +139,20 @@ describe('App test', () => {
     describe('add second establishment success', () => {
       beforeEach(() => {
         nock(process.env.VISIT_MANAGER_URL)
-        .post('/establishments', correctEstablishment2)
-        .reply(201);
+          .post('/establishments', correctEstablishment2)
+          .reply(201);
       });
 
       test('should return 201', async () => {
-        await request(server).post('/establishments').send(correctEstablishment2).expect(201);
+        await request(server).post('/establishments').set('access-token', token).send(correctEstablishment2).expect(201);
       });
     });
 
     describe('get establishments', () => {
       beforeEach(() => {
         nock(process.env.VISIT_MANAGER_URL)
-        .get('/establishments')
-        .reply(200, [correctEstablishment1, correctEstablishment2]);
+          .get('/establishments')
+          .reply(200, [correctEstablishment1, correctEstablishment2]);
       });
 
       test('should return all establishments', async () => {
@@ -182,8 +178,8 @@ describe('App test', () => {
     describe('get matching establishments', () => {
       beforeEach(() => {
         nock(process.env.VISIT_MANAGER_URL)
-        .get('/establishments?type=restaurant')
-        .reply(200, correctEstablishment1);
+          .get('/establishments?type=restaurant')
+          .reply(200, correctEstablishment1);
       });
 
       describe('by type', () => {
@@ -198,8 +194,8 @@ describe('App test', () => {
       describe('by name', () => {
         beforeEach(() => {
           nock(process.env.VISIT_MANAGER_URL)
-          .get('/establishments?name=Coto')
-          .reply(200, correctEstablishment2);
+            .get('/establishments?name=Coto')
+            .reply(200, correctEstablishment2);
         });
 
         test('when full match, should return that establishment', async () => {
@@ -213,11 +209,11 @@ describe('App test', () => {
       describe('get PDF file', () => {
         beforeEach(() => {
           nock(process.env.VISIT_MANAGER_URL)
-          .get(`/establishments/PDF/${establishment_id1}`)
-          .reply(200, {}, {
-            'Content-Type': 'application/pdf',
-            'Content-Disposition': 'attachment'
-          });
+            .get(`/establishments/PDF/${establishment_id1}`)
+            .reply(200, {}, {
+              'Content-Type': 'application/pdf',
+              'Content-Disposition': 'attachment'
+            });
         });
 
         test('should get a PDF document in the response', async () => {
@@ -248,8 +244,8 @@ describe('App test', () => {
 
         beforeEach(() => {
           nock(process.env.VISIT_MANAGER_URL)
-          .post('/visits', visit)
-          .reply(201);
+            .post('/visits', visit)
+            .reply(201);
         });
 
         test('adding a visit should return 201', async () => {
@@ -268,8 +264,8 @@ describe('App test', () => {
 
         beforeEach(() => {
           nock(process.env.VIRUS_TRACKER_URL)
-          .post('/infected', visit1)
-          .reply(201);
+            .post('/infected', visit1)
+            .reply(201);
         });
 
         test('adding an infected should return 201', async () => {
@@ -315,43 +311,43 @@ describe('App test', () => {
         describe('add rule', () => {
           beforeEach(() => {
             nock(process.env.VIRUS_TRACKER_URL)
-            .post('/rules', { rules: [ruleHighRisk]})
-            .reply(201, {rules: [ruleHighRiskResponse]})
-            .post('/rules', { rules: [ruleMidRisk]})
-            .reply(201, {rules: [ruleMidRiskResponse]})
-            .post('/rules', { rules: [ruleHighRisk, ruleMidRisk]})
-            .reply(201, {rules: [ruleHighRiskResponse, ruleMidRiskResponse]})
+              .post('/rules', { rules: [ruleHighRisk] })
+              .reply(201, { rules: [ruleHighRiskResponse] })
+              .post('/rules', { rules: [ruleMidRisk] })
+              .reply(201, { rules: [ruleMidRiskResponse] })
+              .post('/rules', { rules: [ruleHighRisk, ruleMidRisk] })
+              .reply(201, { rules: [ruleHighRiskResponse, ruleMidRiskResponse] })
           });
 
           test('add single rule should return 201', async () => {
-            await request(server).post('/rules').send({ rules: [ruleHighRisk] }).expect(201);
+            await request(server).post('/rules').set('access-token', token).send({ rules: [ruleHighRisk] }).expect(201);
           });
 
           test('add two rules should return 201', async () => {
-            await request(server).post('/rules').send({ rules: [ruleHighRisk, ruleMidRisk] }).expect(201);
+            await request(server).post('/rules').set('access-token', token).send({ rules: [ruleHighRisk, ruleMidRisk] }).expect(201);
           });
         });
 
         describe('get rules', () => {
           beforeEach(() => {
             nock(process.env.VIRUS_TRACKER_URL)
-            .get('/rules')
-            .reply(200, [ruleHighRiskResponse, ruleMidRiskResponse])
-            .get(`/rules/${highRiskId}`)
-            .reply(200, ruleHighRiskResponse)
-            .get(`/rules/${midRiskId}`)
-            .reply(200, ruleMidRiskResponse)
+              .get('/rules')
+              .reply(200, [ruleHighRiskResponse, ruleMidRiskResponse])
+              .get(`/rules/${highRiskId}`)
+              .reply(200, ruleHighRiskResponse)
+              .get(`/rules/${midRiskId}`)
+              .reply(200, ruleMidRiskResponse)
           });
 
           test('should return all rules', async () => {
-            await request(server).get('/rules').then(res => {
+            await request(server).get('/rules').set('access-token', token).then(res => {
               expect(res.status).toBe(200);
               expect(res.body).toHaveLength(2);
             });
           });
 
           test('should return high risk rule', async () => {
-            await request(server).get(`/rules/${highRiskId}`).then(res => {
+            await request(server).get(`/rules/${highRiskId}`).set('access-token', token).then(res => {
               expect(res.status).toBe(200);
               expect(res.body._id).toBe(highRiskId);
               expect(res.body.index).toBe(ruleHighRisk.index);
@@ -362,7 +358,7 @@ describe('App test', () => {
           });
 
           test('should return mid risk rule', async () => {
-            await request(server).get(`/rules/${midRiskId}`).then(res => {
+            await request(server).get(`/rules/${midRiskId}`).set('access-token', token).then(res => {
               expect(res.status).toBe(200);
               expect(res.body._id).toBe(midRiskId);
               expect(res.body.index).toBe(ruleMidRisk.index);
@@ -376,28 +372,28 @@ describe('App test', () => {
         describe('delete rules', () => {
           beforeEach(() => {
             nock(process.env.VIRUS_TRACKER_URL)
-            .delete('/rules', { ruleIds: [highRiskId]})
-            .reply(204)
-            .delete('/rules', { ruleIds: [midRiskId]})
-            .reply(204)
-            .delete('/rules', { ruleIds: [highRiskId, midRiskId]})
-            .reply(204)
+              .delete('/rules', { ruleIds: [highRiskId] })
+              .reply(204)
+              .delete('/rules', { ruleIds: [midRiskId] })
+              .reply(204)
+              .delete('/rules', { ruleIds: [highRiskId, midRiskId] })
+              .reply(204)
           });
 
           test('should delete high risk rule', async () => {
-            await request(server).delete('/rules').send({ ruleIds: [highRiskId] }).then(res => {
+            await request(server).delete('/rules').set('access-token', token).send({ ruleIds: [highRiskId] }).then(res => {
               expect(res.status).toBe(204);
             });
           });
 
           test('should delete mid risk rule', async () => {
-            await request(server).delete('/rules').send({ ruleIds: [midRiskId] }).then(res => {
+            await request(server).delete('/rules').set('access-token', token).send({ ruleIds: [midRiskId] }).then(res => {
               expect(res.status).toBe(204);
             });
           });
 
           test('should delete both rules', async () => {
-            await request(server).delete('/rules').send({ ruleIds: [highRiskId, midRiskId] }).then(res => {
+            await request(server).delete('/rules').set('access-token', token).send({ ruleIds: [highRiskId, midRiskId] }).then(res => {
               expect(res.status).toBe(204);
             });
           });
@@ -436,15 +432,15 @@ describe('App test', () => {
 
           beforeEach(() => {
             nock(process.env.VIRUS_TRACKER_URL)
-            .put('/rules', { rules: [ruleHighRiskUpdated, ruleMidRiskUpdated]})
-            .reply(200, [ruleHighRiskUpdatedResponse, ruleMidRiskUpdatedResponse])
+              .put('/rules', { rules: [ruleHighRiskUpdated, ruleMidRiskUpdated] })
+              .reply(200, [ruleHighRiskUpdatedResponse, ruleMidRiskUpdatedResponse])
           });
 
           test('should update the indexes', async () => {
             let aux = ruleHighRisk.index;
             ruleHighRisk.index = ruleMidRisk.index;
             ruleMidRisk.index = aux;
-            await request(server).put('/rules').send({ rules: [ruleHighRisk, ruleMidRisk] }).then(res => {
+            await request(server).put('/rules').set('access-token', token).send({ rules: [ruleHighRisk, ruleMidRisk] }).then(res => {
               expect(res.status).toBe(200);
             });
           });

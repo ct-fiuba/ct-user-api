@@ -9,6 +9,10 @@
     {
       "name": "establishments",
       "description": "Generation of spaces codes related to establishments"
+    },
+    {
+      "name": "rules",
+      "description": "Generation of contagion rules"
     }
   ],
   "paths": {
@@ -96,6 +100,41 @@
                 }
               }
             }
+          }
+        }
+      }
+    },
+    "/establishments/owner/{ownerId}": {
+      "get": {
+        "tags": [
+          "establishments"
+        ],
+        "summary": "Get establishments by owner id",
+        "description": "",
+        "operationId": "getEstablishmentsByOwnerId",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/pathOwnerId"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Establishment registered in Visit Manager",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/Establishment"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Establishment not found"
           }
         }
       }
@@ -354,103 +393,125 @@
           }
         }
       }
-    }
-  },
-  "/rules": {
-    "post": {
-      "tags": [
-        "rules"
-      ],
-      "summary": "Create new rules",
-      "operationId": "addRules",
-      "requestBody": {
-        "description": "Created rule object",
-        "required": true,
-        "content": {
-          "application/json": {
-            "schema": {
-              "type": "object",
-              "allOf": [
-                {
-                  "$ref": "#/components/schemas/Rule"
-                }
-              ]
-            }
-          }
-        }
-      },
-      "responses": {
-        "200": {
-          "description": "Rule created successfully",
+    },
+    "/rules": {
+      "post": {
+        "tags": [
+          "rules"
+        ],
+        "summary": "Create new rules",
+        "operationId": "addRules",
+        "requestBody": {
+          "description": "Created rule object",
+          "required": true,
           "content": {
             "application/json": {
               "schema": {
-                "type": "object"
-              }
-            }
-          }
-        },
-        "400": {
-          "description": "Missing fields / Invalid visibility"
-        }
-      }
-    },
-    "delete": {
-      "tags": [
-        "rules"
-      ],
-      "summary": "Delete rules",
-      "operationId": "deleteRules",
-      "requestBody": {
-        "description": "Created rule object",
-        "required": true,
-        "content": {
-          "application/json": {
-            "schema": {
-              "type": "array",
-              "items": {
                 "type": "object",
                 "allOf": [
                   {
-                    "$ref": "#/components/schemas/ruleId"
+                    "$ref": "#/components/schemas/Rule"
                   }
                 ]
               }
             }
           }
+        },
+        "responses": {
+          "200": {
+            "description": "Rule created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Missing fields / Invalid visibility"
+          }
         }
       },
-      "responses": {
-        "204": {
-          "description": "Rule deleted successfully",
+      "delete": {
+        "tags": [
+          "rules"
+        ],
+        "summary": "Delete rules",
+        "operationId": "deleteRules",
+        "responses": {
+          "204": {
+            "description": "Rule deleted successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Missing fields / Invalid visibility"
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "rules"
+        ],
+        "summary": "Get all rules",
+        "description": "",
+        "operationId": "getRules",
+        "responses": {
+          "200": {
+            "description": "Rules registered in Virus Tracker",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "allOf": [
+                      {
+                        "$ref": "#/components/schemas/Rule"
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "rules"
+        ],
+        "summary": "Edit Rules",
+        "description": "",
+        "operationId": "editRules",
+        "requestBody": {
+          "description": "Edit rules object",
+          "required": true,
           "content": {
             "application/json": {
               "schema": {
-                "type": "object"
+                "type": "object",
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/Rule"
+                  }
+                ]
               }
             }
           }
         },
-        "400": {
-          "description": "Missing fields / Invalid visibility"
-        }
-      }
-    },
-    "get": {
-      "tags": [
-        "rules"
-      ],
-      "summary": "Get all rules",
-      "description": "",
-      "operationId": "getRules",
-      "responses": {
-        "200": {
-          "description": "Rules registered in Virus Tracker",
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "array",
-                "items": {
+        "responses": {
+          "200": {
+            "description": "Rules edited successfully",
+            "content": {
+              "application/json": {
+                "schema": {
                   "type": "object",
                   "allOf": [
                     {
@@ -460,86 +521,45 @@
                 }
               }
             }
+          },
+          "400": {
+            "description": "Invalid fields / Invalid visibility"
           }
         }
       }
     },
-    "put": {
-      "tags": [
-        "rules"
-      ],
-      "summary": "Edit Rules",
-      "description": "",
-      "operationId": "editRules",
-      "requestBody": {
-        "description": "Edit rules object",
-        "required": true,
-        "content": {
-          "application/json": {
-            "schema": {
-              "type": "object",
-              "allOf": [
-                {
-                  "$ref": "#/components/schemas/Rule"
+    "/rules/{ruleId}": {
+      "get": {
+        "tags": [
+          "rules"
+        ],
+        "summary": "Get rule by id",
+        "description": "",
+        "operationId": "getSingleRule",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/pathRuleId"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Rule registered in Virus Tracker",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/Rule"
+                    }
+                  ]
                 }
-              ]
-            }
-          }
-        }
-      },
-      "responses": {
-        "200": {
-          "description": "Rules edited successfully",
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "allOf": [
-                  {
-                    "$ref": "#/components/schemas/Rule"
-                  }
-                ]
               }
             }
+          },
+          "404": {
+            "description": "Rule not found"
           }
-        },
-        "400": {
-          "description": "Invalid fields / Invalid visibility"
-        }
-      }
-    }
-  },
-  "/rules/{ruleId}": {
-    "get": {
-      "tags": [
-        "rules"
-      ],
-      "summary": "Get rule by id",
-      "description": "",
-      "operationId": "getSingleRule",
-      "parameters": [
-        {
-          "$ref": "#/components/parameters/ruleId"
-        }
-      ],
-      "responses": {
-        "200": {
-          "description": "Rule registered in Virus Tracker",
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "allOf": [
-                  {
-                    "$ref": "#/components/schemas/Rule"
-                  }
-                ]
-              }
-            }
-          }
-        },
-        "404": {
-          "description": "Rule not found"
         }
       }
     }
@@ -553,6 +573,22 @@
         "schema": {
           "type": "integer",
           "minimum": 1
+        }
+      },
+      "pathRuleId": {
+        "in": "path",
+        "name": "ruleId",
+        "required": true,
+        "schema": {
+          "type": "string"
+        }
+      },
+      "pathOwnerId": {
+        "in": "path",
+        "name": "ownerId",
+        "required": true,
+        "schema": {
+          "type": "string"
         }
       }
     },
@@ -571,10 +607,6 @@
           "name": {
             "type": "string",
             "example": "Mc Donalds"
-          },
-          "email": {
-            "type": "string",
-            "example": "mcdonalds@gmail.com"
           },
           "address": {
             "type": "string",
@@ -595,6 +627,10 @@
           "country": {
             "type": "string",
             "example": "Argentina"
+          },
+          "ownerId": {
+            "type": "string",
+            "example": "oqiu431048noiu8"
           },
           "spaces": {
             "type": "array",
@@ -628,7 +664,6 @@
         "required": [
           "type",
           "name",
-          "email",
           "address",
           "city",
           "province",
@@ -644,10 +679,6 @@
           "name": {
             "type": "string",
             "example": "Mc Donalds"
-          },
-          "email": {
-            "type": "string",
-            "example": "mcdonalds@gmail.com"
           },
           "address": {
             "type": "string",
@@ -707,10 +738,6 @@
             "type": "string",
             "example": "Mc Donalds"
           },
-          "email": {
-            "type": "string",
-            "example": "mcdonalds@gmail.com"
-          },
           "address": {
             "type": "string",
             "example": "Cabildo 1010"
@@ -753,7 +780,7 @@
             "example": "1PWIOEJPOVUP12OI34J"
           },
           "timestamp": {
-            "type": "datetime",
+            "type": "string",
             "example": "1970-01-01 00:00:01"
           },
           "isExitScan": {
@@ -769,7 +796,7 @@
             "example": "Pfizer"
           },
           "vaccinatedDate": {
-            "type": "datetime",
+            "type": "string",
             "example": "1970-01-01 00:00:01"
           },
           "covidRecovered": {
@@ -826,10 +853,6 @@
             "example": "60"
           }
         }
-      },
-      "ruleId": {
-        "type": "string",
-        "example": "RuleId"
       }
     }
   }
