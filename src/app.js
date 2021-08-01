@@ -8,6 +8,7 @@ const visitsRouter = require('./routes/visitsRouter');
 const infectedRouter = require('./routes/infectedRouter');
 const rulesRouter = require('./routes/rulesRouter');
 const monitoringRouter = require('./routes/monitoringRouter');
+const billboardRouter = require('./routes/billboardRouter');
 
 module.exports = function app() {
   const app = express();
@@ -19,6 +20,7 @@ module.exports = function app() {
   app.use(visitsRouter());
   app.use(infectedRouter());
   app.use(rulesRouter());
+  app.use(billboardRouter())
   app.use(monitoringRouter());
   app.use('/swagger', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
