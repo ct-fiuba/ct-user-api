@@ -229,7 +229,7 @@ describe('App test', () => {
         const visit = {
           scanCode: "SCANCODE1234",
           userGeneratedCode: "QWER1234YUIO",
-          timestamp: Date.now(),
+          entranceTimestamp: Date.now(),
           vaccinated: 0,
           covidRecovered: false
         };
@@ -237,7 +237,7 @@ describe('App test', () => {
         const invalidVisit = {
           scanCode: "SCANCODE1234",
           userGeneratedCode: "QWER1234YUIO",
-          timestamp: Date.now(),
+          entranceTimestamp: Date.now(),
           vaccinated: 0,
           covidRecovered: false
         };

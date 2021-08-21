@@ -9,5 +9,6 @@ module.exports = function visitsRouter() {
     '/visits',
     express.Router()
       .post('/', genuxMiddleware, visitsController.add)
+      .post('/addExitTimestamp', genuxMiddleware, visitsController.addExitTimestamp)
   );
 };
