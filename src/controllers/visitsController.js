@@ -6,7 +6,13 @@ module.exports = function visitsController(visitManagerGateway) {
     pipelineResponse(visitManagerResponse, res)
   };
 
+  const addExitTimestamp = async (req, res, next) => {
+    let visitManagerResponse = await visitManagerGateway.addExitTimestamp(req.body)
+    pipelineResponse(visitManagerResponse, res)
+  };
+
   return {
-    add
+    add,
+    addExitTimestamp
   };
 };

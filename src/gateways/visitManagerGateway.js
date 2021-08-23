@@ -50,6 +50,10 @@ module.exports = function visitManagerGateway() {
     return visitManagerAPI.stream.post('visits', { json: visitInfo });
   };
 
+  const addExitTimestamp = async visitInfo => {
+    return visitManagerAPI.stream.post('visits/addExitTimestamp', { json: visitInfo });
+  };
+
   return {
     findEstablishments,
     findEstablishmentsByOwner,
@@ -61,6 +65,7 @@ module.exports = function visitManagerGateway() {
     updateEstablishment,
     updateSpace,
     deleteEstablishment,
-    addVisit
+    addVisit,
+    addExitTimestamp
   };
 };
