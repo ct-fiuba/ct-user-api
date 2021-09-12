@@ -6,6 +6,7 @@ let server;
 let establishment_id1 = 1;
 let token = 'someToken';
 let invalidToken = 'badToken';
+let userToken = 'userToken'
 
 let type1 = 'restaurant';
 let name1 = 'Mc Donalds';
@@ -76,7 +77,9 @@ describe('App test', () => {
       .post('/useGenuxToken', { genuxToken: validGenuxToken })
       .reply(200)
       .post('/useGenuxToken', { genuxToken: invalidGenuxToken })
-      .reply(404);
+      .reply(404)
+      .post('/users/validateaccesstoken', { accessToken: userToken })
+      .reply(200, { data: "Some data" });
   });
 
   afterEach(nock.cleanAll);
@@ -443,6 +446,23 @@ describe('App test', () => {
             await request(server).put('/rules').set('access-token', token).send({ rules: [ruleHighRisk, ruleMidRisk] }).then(res => {
               expect(res.status).toBe(200);
             });
+          });
+        });
+      });
+
+      describe('billboard', () => {
+        let codeCompromised = {}
+
+        beforeEach(() => {
+          nock(process.env.CODES_WHISPERER_URL)
+            .get('/billboard')
+            .reply(200, [codeCompromised]);
+        });
+
+        test('return all code compromised', async () => {
+          await request(server).get('/billboard').set('access-token', userToken).then(res => {
+            expect(res.status).toBe(200);
+            expect(res.body).toStrictEqual([codeCompromised]);
           });
         });
       });

@@ -13,6 +13,18 @@
     {
       "name": "rules",
       "description": "Generation of contagion rules"
+    },
+    {
+      "name": "billboard",
+      "description": "Codes compromised"
+    },
+    {
+      "name": "infected",
+      "description": "Generation of infected"
+    },
+    {
+      "name": "visits",
+      "description": "Generation of visits"
     }
   ],
   "paths": {
@@ -615,6 +627,47 @@
           }
         }
       }
+    },
+    "/billboard": {
+      "get": {
+        "tags": [
+          "billboard"
+        ],
+        "summary": "Get all establishments",
+        "description": "",
+        "operationId": "getBillboard",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "access-token",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Compromised codes",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "allOf": [
+                      {
+                        "$ref": "#/components/schemas/CompromisedCode"
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -943,6 +996,33 @@
           "covidRecoveredDaysAgoMax": {
             "type": "integer",
             "example": "60"
+          }
+        }
+      },
+      "CompromisedCode": {
+        "type": "object",
+        "required": [
+          "scanCode",
+          "userGeneratedCode",
+          "dateDetected",
+          "risk"
+        ],
+        "properties": {
+          "scanCode": {
+            "type": "string",
+            "example": "MNPQWOEUPO452345"
+          },
+          "userGeneratedCode": {
+            "type": "string",
+            "example": "1PWIOEJPOVUP12OI34J"
+          },
+          "dateDetected": {
+            "type": "string",
+            "example": "1970-01-01"
+          },
+          "risk": {
+            "type": "integer",
+            "example": "1"
           }
         }
       }
