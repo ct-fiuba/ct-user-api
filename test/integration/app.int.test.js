@@ -20,14 +20,14 @@ let spaces1 = [
     name: "Primer piso",
     hasExit: true,
     m2: "1000",
-    openPlace: false,
+    openSpace: false,
     n95Mandatory: false
   },
   {
     name: "Terraza",
     hasExit: false,
     m2: "400",
-    openPlace: true,
+    openSpace: true,
     n95Mandatory: false
   }
 ];
@@ -40,14 +40,14 @@ let spaces2 = [
     name: "Primer piso",
     hasExit: true,
     m2: "1000",
-    openPlace: false,
+    openSpace: false,
     n95Mandatory: false
   },
   {
     name: "Terraza",
     hasExit: false,
     m2: "400",
-    openPlace: true,
+    openSpace: true,
     n95Mandatory: false
   }
 ];

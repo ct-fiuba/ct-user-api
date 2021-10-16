@@ -753,7 +753,7 @@
                 "m2": {
                   "type": "integer"
                 },
-                "openPlace": {
+                "openSpace": {
                   "type": "boolean"
                 },
                 "n95Mandatory": {
@@ -821,7 +821,7 @@
                 "m2": {
                   "type": "integer"
                 },
-                "openPlace": {
+                "openSpace": {
                   "type": "boolean"
                 },
                 "n95Mandatory": {
