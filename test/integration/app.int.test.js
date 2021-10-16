@@ -279,7 +279,7 @@ describe('App test', () => {
       describe('rules', () => {
         let ruleHighRisk = {
           "index": 1,
-          "contagionRisk": "Alto",
+          "contagionRisk": 0,
           "m2Value": 10,
           "m2Cmp": "<"
         }
@@ -289,14 +289,14 @@ describe('App test', () => {
         let ruleHighRiskResponse = {
           "_id": highRiskId,
           "index": 1,
-          "contagionRisk": "Alto",
+          "contagionRisk": 0,
           "m2Value": 10,
           "m2Cmp": "<"
         }
 
         let ruleMidRisk = {
           "index": 2,
-          "contagionRisk": "Medio",
+          "contagionRisk": 1,
           "m2Value": 10,
           "m2Cmp": ">"
         }
@@ -306,7 +306,7 @@ describe('App test', () => {
         let ruleMidRiskResponse = {
           "_id": midRiskId,
           "index": 2,
-          "contagionRisk": "Medio",
+          "contagionRisk": 1,
           "m2Value": 10,
           "m2Cmp": ">"
         }
@@ -405,14 +405,14 @@ describe('App test', () => {
         describe('update rules', () => {
           let ruleHighRiskUpdated = {
             "index": 2,
-            "contagionRisk": "Alto",
+            "contagionRisk": 0,
             "m2Value": 10,
             "m2Cmp": "<"
           }
 
           let ruleMidRiskUpdated = {
             "index": 1,
-            "contagionRisk": "Medio",
+            "contagionRisk": 1,
             "m2Value": 10,
             "m2Cmp": ">"
           }
@@ -420,7 +420,7 @@ describe('App test', () => {
           let ruleHighRiskUpdatedResponse = {
             "_id": highRiskId,
             "index": 2,
-            "contagionRisk": "Alto",
+            "contagionRisk": 0,
             "m2Value": 10,
             "m2Cmp": "<"
           }
@@ -428,7 +428,7 @@ describe('App test', () => {
           let ruleMidRiskUpdatedResponse = {
             "_id": midRiskId,
             "index": 1,
-            "contagionRisk": "Medio",
+            "contagionRisk": 1,
             "m2Value": 10,
             "m2Cmp": ">"
           }
