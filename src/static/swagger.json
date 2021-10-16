@@ -873,7 +873,7 @@
           "userGeneratedCode",
           "entranceTimestamp",
           "vaccinated",
-          "covidRecovered"
+          "illnessRecovered"
         ],
         "properties": {
           "spaceId": {
@@ -900,11 +900,11 @@
             "type": "string",
             "example": "1970-01-01 00:00:01"
           },
-          "covidRecovered": {
+          "illnessRecovered": {
             "type": "boolean",
             "example": "true"
           },
-          "covidRecoveredDate": {
+          "illnessRecoveredDate": {
             "type": "boolean",
             "example": "true"
           }
@@ -917,7 +917,7 @@
           "userGeneratedCode",
           "exitTimestamp",
           "vaccinated",
-          "covidRecovered"
+          "illnessRecovered"
         ],
         "properties": {
           "spaceId": {
@@ -944,11 +944,11 @@
             "type": "string",
             "example": "1970-01-01 00:00:01"
           },
-          "covidRecovered": {
+          "illnessRecovered": {
             "type": "boolean",
             "example": "true"
           },
-          "covidRecoveredDate": {
+          "illnessRecoveredDate": {
             "type": "boolean",
             "example": "true"
           }
@@ -989,11 +989,11 @@
             "type": "integer",
             "example": "60"
           },
-          "covidRecovered": {
+          "illnessRecovered": {
             "type": "boolean",
             "example": "true"
           },
-          "covidRecoveredDaysAgoMax": {
+          "illnessRecoveredDaysAgoMax": {
             "type": "integer",
             "example": "60"
           }

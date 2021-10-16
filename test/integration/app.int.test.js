@@ -230,19 +230,19 @@ describe('App test', () => {
 
       describe('add visits', () => {
         const visit = {
-          spaceId: new mongoose.Types.ObjectId(),
+          spaceId: 'valid_space_id',
           userGeneratedCode: "QWER1234YUIO",
           entranceTimestamp: Date.now(),
           vaccinated: 0,
-          covidRecovered: false
+          illnessRecovered: false
         };
 
         const invalidVisit = {
-          spaceId: new mongoose.Types.ObjectId(),
+          spaceId: 'invalid_space_id',
           userGeneratedCode: "QWER1234YUIO",
           entranceTimestamp: Date.now(),
           vaccinated: 0,
-          covidRecovered: false
+          illnessRecovered: false
         };
 
         beforeEach(() => {
