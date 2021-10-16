@@ -230,7 +230,7 @@ describe('App test', () => {
 
       describe('add visits', () => {
         const visit = {
-          scanCode: "SCANCODE1234",
+          spaceId: new mongoose.Types.ObjectId(),
           userGeneratedCode: "QWER1234YUIO",
           entranceTimestamp: Date.now(),
           vaccinated: 0,
@@ -238,7 +238,7 @@ describe('App test', () => {
         };
 
         const invalidVisit = {
-          scanCode: "SCANCODE1234",
+          spaceId: new mongoose.Types.ObjectId(),
           userGeneratedCode: "QWER1234YUIO",
           entranceTimestamp: Date.now(),
           vaccinated: 0,
