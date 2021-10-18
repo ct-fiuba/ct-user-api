@@ -20,14 +20,14 @@ let spaces1 = [
     name: "Primer piso",
     hasExit: true,
     m2: "1000",
-    openPlace: false,
+    openSpace: false,
     n95Mandatory: false
   },
   {
     name: "Terraza",
     hasExit: false,
     m2: "400",
-    openPlace: true,
+    openSpace: true,
     n95Mandatory: false
   }
 ];
@@ -40,14 +40,14 @@ let spaces2 = [
     name: "Primer piso",
     hasExit: true,
     m2: "1000",
-    openPlace: false,
+    openSpace: false,
     n95Mandatory: false
   },
   {
     name: "Terraza",
     hasExit: false,
     m2: "400",
-    openPlace: true,
+    openSpace: true,
     n95Mandatory: false
   }
 ];
@@ -230,19 +230,19 @@ describe('App test', () => {
 
       describe('add visits', () => {
         const visit = {
-          scanCode: "SCANCODE1234",
+          spaceId: 'valid_space_id',
           userGeneratedCode: "QWER1234YUIO",
           entranceTimestamp: Date.now(),
           vaccinated: 0,
-          covidRecovered: false
+          illnessRecovered: false
         };
 
         const invalidVisit = {
-          scanCode: "SCANCODE1234",
+          spaceId: 'invalid_space_id',
           userGeneratedCode: "QWER1234YUIO",
           entranceTimestamp: Date.now(),
           vaccinated: 0,
-          covidRecovered: false
+          illnessRecovered: false
         };
 
         beforeEach(() => {
@@ -279,7 +279,7 @@ describe('App test', () => {
       describe('rules', () => {
         let ruleHighRisk = {
           "index": 1,
-          "contagionRisk": "Alto",
+          "contagionRisk": 0,
           "m2Value": 10,
           "m2Cmp": "<"
         }
@@ -289,14 +289,14 @@ describe('App test', () => {
         let ruleHighRiskResponse = {
           "_id": highRiskId,
           "index": 1,
-          "contagionRisk": "Alto",
+          "contagionRisk": 0,
           "m2Value": 10,
           "m2Cmp": "<"
         }
 
         let ruleMidRisk = {
           "index": 2,
-          "contagionRisk": "Medio",
+          "contagionRisk": 1,
           "m2Value": 10,
           "m2Cmp": ">"
         }
@@ -306,7 +306,7 @@ describe('App test', () => {
         let ruleMidRiskResponse = {
           "_id": midRiskId,
           "index": 2,
-          "contagionRisk": "Medio",
+          "contagionRisk": 1,
           "m2Value": 10,
           "m2Cmp": ">"
         }
@@ -405,14 +405,14 @@ describe('App test', () => {
         describe('update rules', () => {
           let ruleHighRiskUpdated = {
             "index": 2,
-            "contagionRisk": "Alto",
+            "contagionRisk": 0,
             "m2Value": 10,
             "m2Cmp": "<"
           }
 
           let ruleMidRiskUpdated = {
             "index": 1,
-            "contagionRisk": "Medio",
+            "contagionRisk": 1,
             "m2Value": 10,
             "m2Cmp": ">"
           }
@@ -420,7 +420,7 @@ describe('App test', () => {
           let ruleHighRiskUpdatedResponse = {
             "_id": highRiskId,
             "index": 2,
-            "contagionRisk": "Alto",
+            "contagionRisk": 0,
             "m2Value": 10,
             "m2Cmp": "<"
           }
@@ -428,7 +428,7 @@ describe('App test', () => {
           let ruleMidRiskUpdatedResponse = {
             "_id": midRiskId,
             "index": 1,
-            "contagionRisk": "Medio",
+            "contagionRisk": 1,
             "m2Value": 10,
             "m2Cmp": ">"
           }
