@@ -30,12 +30,32 @@ module.exports = function virusTrackerGateway() {
     return virusTrackerAPI.stream.delete(`rules`, { json: rulesInfo });
   };
 
+  const addVaccine = async vaccineInfo => {
+    return virusTrackerAPI.stream.post('vaccines', { json: vaccineInfo });
+  };
+
+  const findVaccines = async () => {
+    return virusTrackerAPI.stream.get('vaccines');
+  };
+
+  const updateVaccine = async vaccineInfo => {
+    return virusTrackerAPI.stream.put(`vaccines`, { json: vaccineInfo });
+  };
+
+  const deleteVaccine = async (vaccineInfo) => {
+    return virusTrackerAPI.stream.delete(`vaccines`, { json: vaccineInfo });
+  };
+
   return {
     addInfected,
     addRules,
     findRules,
     findRule,
     updateRules,
-    deleteRules
+    deleteRules,
+    addVaccine,
+    findVaccines,
+    updateVaccine,
+    deleteVaccine
   };
 };
