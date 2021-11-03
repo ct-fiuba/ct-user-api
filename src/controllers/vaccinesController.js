@@ -12,12 +12,14 @@ module.exports = function vaccinesController(virusTrackerGateway) {
   };
 
   const update = async (req, res, next) => {
-    let virusTrackerResponse = await virusTrackerGateway.updateVaccine(req.body)
+    vaccineId = req.params.vaccineId;
+    let virusTrackerResponse = await virusTrackerGateway.updateVaccine(vaccineId, req.body)
     pipelineResponse(virusTrackerResponse, res)
   };
 
   const remove = async (req, res, next) => {
-    let virusTrackerResponse = await virusTrackerGateway.deleteVaccine(req.body)
+    vaccineId = req.params.vaccineId;
+    let virusTrackerResponse = await virusTrackerGateway.deleteVaccine(vaccineId, req.body)
     pipelineResponse(virusTrackerResponse, res)
   };
 

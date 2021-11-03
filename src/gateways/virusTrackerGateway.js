@@ -38,12 +38,12 @@ module.exports = function virusTrackerGateway() {
     return virusTrackerAPI.stream.get('vaccines');
   };
 
-  const updateVaccine = async vaccineInfo => {
-    return virusTrackerAPI.stream.put(`vaccines`, { json: vaccineInfo });
+  const updateVaccine = async (vaccineId, vaccineInfo) => {
+    return virusTrackerAPI.stream.put(`vaccines/${vaccineId}`, { json: vaccineInfo });
   };
 
-  const deleteVaccine = async (vaccineInfo) => {
-    return virusTrackerAPI.stream.delete(`vaccines`, { json: vaccineInfo });
+  const deleteVaccine = async (vaccineId, vaccineInfo) => {
+    return virusTrackerAPI.stream.delete(`vaccines/${vaccineId}`, { json: vaccineInfo });
   };
 
   return {

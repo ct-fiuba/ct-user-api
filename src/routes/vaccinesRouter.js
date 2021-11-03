@@ -10,7 +10,7 @@ module.exports = function rulesRouter() {
     express.Router()
       .get('/', vaccinesController.get)
       .post('/', adminsAuthenticationMiddleware, vaccinesController.add)
-      .delete('/', adminsAuthenticationMiddleware, vaccinesController.remove)
-      .put('/', adminsAuthenticationMiddleware, vaccinesController.update)
+      .delete('/:vaccineId', adminsAuthenticationMiddleware, vaccinesController.remove)
+      .put('/:vaccineId', adminsAuthenticationMiddleware, vaccinesController.update)
   );
 };
